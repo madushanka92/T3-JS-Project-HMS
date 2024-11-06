@@ -1,8 +1,46 @@
-.middle-container {
+.side-container {
     .side-menu {
-        background-color: aqua;
-        h3 {
-            writing-mode: vertical-rl;
+        background-color: #f5f6fa;
+        width: 250px;
+        height: 100%;
+        // h3 {
+        //     writing-mode: vertical-rl;
+        // }
+
+        nav.navbar {
+            align-items: flex-start;
+
+            .navTitle {
+                color: black;
+                width: 100%;
+                padding: 10px;
+                border-bottom: 1px solid #0000005c;
+
+                a {
+                    color: inherit;
+                }
+            }
+
+            .flex-column.navbar-nav {
+                padding-top: 15px;
+                width: 100%;
+            }
+            .nav-item {
+                width: 100%;
+
+                > a {
+                    display: flex;
+                    align-items: center;
+                }
+
+                > a.bg-selected {
+                    background-color: #00000017 !important;
+                }
+
+                span {
+                    padding-left: 10px;
+                }
+            }
         }
     }
 }

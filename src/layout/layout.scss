@@ -1,8 +1,11 @@
-.middle-container {
-  display: flex;
+.app-container {
   height: 100%;
+  .main-container {
+    display: flex;
+    height: 100%;
 
-  main {
-    width: 100%;
+    .middle-container {
+      width: 100%;
+    }
   }
 }

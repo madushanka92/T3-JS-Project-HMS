@@ -1,0 +1,16 @@
+.login-contant {
+    background-image: url("../imgs/healthcare.jpg");
+    background-size: cover;
+    height: 550px;
+
+    > div {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        width: 100%;
+
+        > div.card {
+            width: 500px;
+        }
+    }
+}
