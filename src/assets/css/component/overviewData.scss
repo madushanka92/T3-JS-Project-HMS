@@ -1,0 +1,30 @@
+.overview-data {
+    padding: 25px;
+    width: 300px;
+    height: 100px;
+    background-color: white;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    .details {
+        text-align: start;
+        h3 {
+            font-size: 16px;
+            color: rgb(117, 117, 117);
+        }
+
+        span {
+            font-weight: bold;
+        }
+    }
+    .icon {
+        font-size: 35px;
+    }
+}
+
+.outer-view {
+    padding: 10px;
+}
