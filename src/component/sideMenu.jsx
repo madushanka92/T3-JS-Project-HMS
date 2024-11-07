@@ -3,7 +3,7 @@ import "../assets/css/component/sideMenu.scss";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { Nav, Navbar, Container } from "react-bootstrap";
 import { FaHome, FaUser, FaCog } from "react-icons/fa"; // Using react-icons for icons
-import { FaUserPlus } from "react-icons/fa6";
+import { FaMoneyCheck, FaUserPlus } from "react-icons/fa6";
 
 const SideMenu = () => {
   const location = useLocation(); // Get current route using useLocation
@@ -57,7 +57,18 @@ const SideMenu = () => {
                     <span>Add User</span>
                   </Nav.Link>             
               </Nav.Item>
+              <Nav.Item>
+                <Nav.Link
+                  href="/billing"
+                  className={`text-dark ${
+                    activeKey === "/billing"?"bg-selected":""
+                  }`}
+                  >
+                    <FaMoneyCheck className="me-2"/>
+                    <span>Billing</span>
 
+                </Nav.Link>
+              </Nav.Item>
               
 
               <Nav.Item>
