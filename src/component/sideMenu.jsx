@@ -13,6 +13,12 @@ const SideMenu = () => {
     setActiveKey(location.pathname);
   }, [location]); // Dependency on location.pathname, so it updates on route change
 
+  const [openSubMenu, setOpenSubMenu] = useState(null); // State to manage the open submenus
+
+  const toggleSubMenu = (menu) => {
+    setOpenSubMenu(openSubMenu === menu ? null : menu); // Toggle the submenu
+  };
+
   return (
     <div className="side-menu">
       <div className="d-flex">
@@ -33,9 +39,11 @@ const SideMenu = () => {
                   <span>Home</span>
                 </Nav.Link>
               </Nav.Item>
+
+              {/* Profile menu with subitems */}
               <Nav.Item>
                 <Nav.Link
-                  href="/profile"
+                  onClick={() => toggleSubMenu("profile")}
                   className={`text-dark ${
                     activeKey === "/profile" ? "bg-selected" : ""
                   }`}
@@ -43,10 +51,36 @@ const SideMenu = () => {
                   <FaUser className="me-2" />
                   <span>Profile</span>
                 </Nav.Link>
+                {openSubMenu === "profile" && (
+                  <Nav className="flex-column ps-3">
+                    <Nav.Item>
+                      <Nav.Link
+                        href="/profile"
+                        className={`text-dark ${
+                          activeKey === "/profile" ? "bg-selected" : ""
+                        }`}
+                      >
+                        Profile Details
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                      <Nav.Link
+                        href="/profile/edit"
+                        className={`text-dark ${
+                          activeKey === "/profile/edit" ? "bg-selected" : ""
+                        }`}
+                      >
+                        Edit Profile
+                      </Nav.Link>
+                    </Nav.Item>
+                  </Nav>
+                )}
               </Nav.Item>
+
+              {/* Settings menu with subitems */}
               <Nav.Item>
                 <Nav.Link
-                  href="/settings"
+                  onClick={() => toggleSubMenu("settings")}
                   className={`text-dark ${
                     activeKey === "/settings" ? "bg-selected" : ""
                   }`}
@@ -54,6 +88,71 @@ const SideMenu = () => {
                   <FaCog className="me-2" />
                   <span>Settings</span>
                 </Nav.Link>
+                {openSubMenu === "settings" && (
+                  <Nav className="flex-column ps-3">
+                    <Nav.Item>
+                      <Nav.Link
+                        href="/settings/general"
+                        className={`text-dark ${
+                          activeKey === "/settings/general" ? "bg-selected" : ""
+                        }`}
+                      >
+                        General Settings
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                      <Nav.Link
+                        href="/settings/security"
+                        className={`text-dark ${
+                          activeKey === "/settings/security"
+                            ? "bg-selected"
+                            : ""
+                        }`}
+                      >
+                        Security Settings
+                      </Nav.Link>
+                    </Nav.Item>
+                  </Nav>
+                )}
+              </Nav.Item>
+
+              {/* Users menu with subitems */}
+              <Nav.Item>
+                <Nav.Link
+                  onClick={() => toggleSubMenu("users")}
+                  className={`text-dark ${
+                    activeKey === "/settings" ? "bg-selected" : ""
+                  }`}
+                >
+                  <FaCog className="me-2" />
+                  <span>Users</span>
+                </Nav.Link>
+                {openSubMenu === "users" && (
+                  <Nav className="flex-column ps-3">
+                    <Nav.Item>
+                      <Nav.Link
+                        href="/users/list"
+                        className={`text-dark ${
+                          activeKey === "/users/list" ? "bg-selected" : ""
+                        }`}
+                      >
+                        User List
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                      <Nav.Link
+                        href="/users/create"
+                        className={`text-dark ${
+                          activeKey === "/users/create"
+                            ? "bg-selected"
+                            : ""
+                        }`}
+                      >
+                        User Create
+                      </Nav.Link>
+                    </Nav.Item>
+                  </Nav>
+                )}
               </Nav.Item>
             </Nav>
           </Navbar>
