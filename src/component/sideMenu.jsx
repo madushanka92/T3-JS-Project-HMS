@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "../assets/css/component/sideMenu.scss";
-import { Link, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { Nav, Navbar, Container } from "react-bootstrap";
 import { FaHome, FaUser, FaCog } from "react-icons/fa"; // Using react-icons for icons
+import { FaMoneyCheck, FaUserPlus } from "react-icons/fa6";
 
 const SideMenu = () => {
   const location = useLocation(); // Get current route using useLocation
