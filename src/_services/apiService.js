@@ -38,7 +38,7 @@ const departmentService = {
 
 // Patient API
 const patientService = {
-    getAllPatients: () => api.get("/patients"),
+    getAllPatients: (pageNumber, pageSize, search) => api.get(`/patients?pageNumber=${pageNumber}&pageSize=${pageSize}&search=${search}`),
     getPatientById: (id) => api.get(`/patients/${id}`),
     createPatient: (patientData) => api.post('/patients', patientData),
     updatePatient: (id, patientData) => api.put(`/patients/${id}`, patientData),
