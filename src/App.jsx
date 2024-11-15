@@ -1,12 +1,12 @@
-import './App.css'
+import "./App.css";
+import "./assets/css/Pages.scss";
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Layout from './layout/layout';
-import LoginPage from './views/LoginPage';
-import appRoutes from './route';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Layout from "./layout/layout";
+import LoginPage from "./views/LoginPage";
+import appRoutes from "./route";
 
 function App() {
-
   return (
     <BrowserRouter>
       <Routes>
@@ -17,8 +17,8 @@ function App() {
           ))}
         </Route>
       </Routes>
-  </BrowserRouter>
-  )
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

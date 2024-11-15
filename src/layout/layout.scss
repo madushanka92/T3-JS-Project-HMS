@@ -9,4 +9,16 @@
       background-color: #f1f0f7;
     }
   }
+
+  main {
+    background-color: #f1f0f7;
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+    padding: 25px;
+    overflow: auto;
+    height: calc(100% - 120px);
+  }
 }

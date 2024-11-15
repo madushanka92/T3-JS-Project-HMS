@@ -144,12 +144,49 @@ const SideMenu = () => {
                       <Nav.Link
                         href="/users/create"
                         className={`text-dark ${
-                          activeKey === "/users/create"
+                          activeKey === "/users/create" ? "bg-selected" : ""
+                        }`}
+                      >
+                        User Create
+                      </Nav.Link>
+                    </Nav.Item>
+                  </Nav>
+                )}
+              </Nav.Item>
+
+              {/* Departments menu with subitems */}
+              <Nav.Item>
+                <Nav.Link
+                  onClick={() => toggleSubMenu("departments")}
+                  className={`text-dark ${
+                    activeKey === "/departments" ? "bg-selected" : ""
+                  }`}
+                >
+                  <FaCog className="me-2" />
+                  <span>Departments</span>
+                </Nav.Link>
+                {openSubMenu === "departments" && (
+                  <Nav className="flex-column ps-3">
+                    <Nav.Item>
+                      <Nav.Link
+                        href="/departments/list"
+                        className={`text-dark ${
+                          activeKey === "/departments/list" ? "bg-selected" : ""
+                        }`}
+                      >
+                        Departments List
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                      <Nav.Link
+                        href="/departments/create"
+                        className={`text-dark ${
+                          activeKey === "/departments/create"
                             ? "bg-selected"
                             : ""
                         }`}
                       >
-                        User Create
+                        Departments Create
                       </Nav.Link>
                     </Nav.Item>
                   </Nav>
