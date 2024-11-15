@@ -30,15 +30,15 @@ const SideMenu = () => {
             </div>
             <Nav className="flex-column" activeKey={activeKey}>
               <Nav.Item>
-                <Nav.Link
-                  href="/home"
-                  className={`text-dark ${
+                <NavLink
+                  to="/home"
+                  className={`text-dark nav-link ${
                     activeKey === "/home" ? "bg-selected" : ""
                   }`}
                 >
                   <FaHome className="me-2" />
                   <span>Home</span>
-                </Nav.Link>
+                </NavLink>
               </Nav.Item>
 
               {/* Profile menu with subitems */}
@@ -53,26 +53,26 @@ const SideMenu = () => {
                   <span>Profile</span>
                 </Nav.Link>
                 {openSubMenu === "profile" && (
-                  <Nav className="flex-column ps-3">
+                  <Nav className="flex-column ps-3 pt-0">
                     <Nav.Item>
-                      <Nav.Link
-                        href="/profile"
+                      <NavLink
+                        to="/profile"
                         className={`text-dark ${
                           activeKey === "/profile" ? "bg-selected" : ""
                         }`}
                       >
                         Profile Details
-                      </Nav.Link>
+                      </NavLink>
                     </Nav.Item>
                     <Nav.Item>
-                      <Nav.Link
-                        href="/profile/edit"
+                      <NavLink
+                        to="/profile/edit"
                         className={`text-dark ${
                           activeKey === "/profile/edit" ? "bg-selected" : ""
                         }`}
                       >
                         Edit Profile
-                      </Nav.Link>
+                      </NavLink>
                     </Nav.Item>
                   </Nav>
                 )}
@@ -90,20 +90,20 @@ const SideMenu = () => {
                   <span>Settings</span>
                 </Nav.Link>
                 {openSubMenu === "settings" && (
-                  <Nav className="flex-column ps-3">
+                  <Nav className="flex-column ps-3 pt-0">
                     <Nav.Item>
-                      <Nav.Link
-                        href="/settings/general"
+                      <NavLink
+                        to="/settings/general"
                         className={`text-dark ${
                           activeKey === "/settings/general" ? "bg-selected" : ""
                         }`}
                       >
                         General Settings
-                      </Nav.Link>
+                      </NavLink>
                     </Nav.Item>
                     <Nav.Item>
-                      <Nav.Link
-                        href="/settings/security"
+                      <NavLink
+                        to="/settings/security"
                         className={`text-dark ${
                           activeKey === "/settings/security"
                             ? "bg-selected"
@@ -111,7 +111,7 @@ const SideMenu = () => {
                         }`}
                       >
                         Security Settings
-                      </Nav.Link>
+                      </NavLink>
                     </Nav.Item>
                   </Nav>
                 )}
@@ -129,26 +129,26 @@ const SideMenu = () => {
                   <span>Users</span>
                 </Nav.Link>
                 {openSubMenu === "users" && (
-                  <Nav className="flex-column ps-3">
-                    <Nav.Item>
-                      <Nav.Link
-                        href="/users/list"
+                  <Nav className="flex-column ps-3 pt-0">
+                    <Nav.Item className="pb-2">
+                      <NavLink
+                        to="/users/list"
                         className={`text-dark ${
                           activeKey === "/users/list" ? "bg-selected" : ""
                         }`}
                       >
                         User List
-                      </Nav.Link>
+                      </NavLink>
                     </Nav.Item>
-                    <Nav.Item>
-                      <Nav.Link
-                        href="/users/create"
+                    <Nav.Item className="pb-2">
+                      <NavLink
+                        to="/users/create"
                         className={`text-dark ${
                           activeKey === "/users/create" ? "bg-selected" : ""
                         }`}
                       >
                         User Create
-                      </Nav.Link>
+                      </NavLink>
                     </Nav.Item>
                   </Nav>
                 )}
@@ -166,20 +166,20 @@ const SideMenu = () => {
                   <span>Departments</span>
                 </Nav.Link>
                 {openSubMenu === "departments" && (
-                  <Nav className="flex-column ps-3">
-                    <Nav.Item>
-                      <Nav.Link
-                        href="/departments/list"
+                  <Nav className="flex-column ps-3 pt-0">
+                    <Nav.Item className="pb-2">
+                      <NavLink
+                        to="/departments/list"
                         className={`text-dark ${
                           activeKey === "/departments/list" ? "bg-selected" : ""
                         }`}
                       >
                         Departments List
-                      </Nav.Link>
+                      </NavLink>
                     </Nav.Item>
-                    <Nav.Item>
-                      <Nav.Link
-                        href="/departments/create"
+                    <Nav.Item className="pb-2">
+                      <NavLink
+                        to="/departments/create"
                         className={`text-dark ${
                           activeKey === "/departments/create"
                             ? "bg-selected"
@@ -187,7 +187,7 @@ const SideMenu = () => {
                         }`}
                       >
                         Departments Create
-                      </Nav.Link>
+                      </NavLink>
                     </Nav.Item>
                   </Nav>
                 )}
@@ -205,26 +205,26 @@ const SideMenu = () => {
                   <span>Patients</span>
                 </Nav.Link>
                 {openSubMenu === "patients" && (
-                  <Nav className="flex-column ps-3">
-                    <Nav.Item>
-                      <Nav.Link
-                        href="/patients/list"
+                  <Nav className="flex-column ps-3 pt-0">
+                    <Nav.Item className="pb-2">
+                      <NavLink
+                        to="/patients/list"
                         className={`text-dark ${
                           activeKey === "/patients/list" ? "bg-selected" : ""
                         }`}
                       >
                         Patients List
-                      </Nav.Link>
+                      </NavLink>
                     </Nav.Item>
-                    <Nav.Item>
-                      <Nav.Link
-                        href="/patients/create"
+                    <Nav.Item className="pb-2">
+                      <NavLink
+                        to="/patients/create"
                         className={`text-dark ${
                           activeKey === "/patients/create" ? "bg-selected" : ""
                         }`}
                       >
                         Patients Create
-                      </Nav.Link>
+                      </NavLink>
                     </Nav.Item>
                   </Nav>
                 )}
