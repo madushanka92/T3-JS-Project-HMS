@@ -229,6 +229,18 @@ const SideMenu = () => {
                   </Nav>
                 )}
               </Nav.Item>
+
+              <Nav.Item>
+                <NavLink
+                  to="/roles"
+                  className={`text-dark nav-link ${
+                    activeKey === "/roles" ? "bg-selected" : ""
+                  }`}
+                >
+                  <FaHome className="me-2" />
+                  <span>Roles</span>
+                </NavLink>
+              </Nav.Item>
             </Nav>
           </Navbar>
         </div>
