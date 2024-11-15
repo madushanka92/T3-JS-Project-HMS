@@ -45,4 +45,12 @@ const patientService = {
     deletePatient: (id) => api.delete(`/patients/${id}`),
 };
 
-export { userService, roleService, departmentService, patientService };
+const roomService = {
+    getAllRooms: () => api.get('/rooms'),
+    getRoomById: (id) => api.get(`/rooms/${id}`),
+    createRoom: (roomData) => api.post('/rooms', roomData),
+    updateRoom: (id, roomData) => api.put(`/rooms/${id}`, roomData),
+    deleteRoom: (id) => api.delete(`/rooms/${id}`),
+};
+
+export { userService, roleService, departmentService, patientService, roomService };

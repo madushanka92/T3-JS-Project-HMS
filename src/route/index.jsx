@@ -17,6 +17,10 @@ import PatientForm from "../views/Patient/patient-create";
 // Roles
 import RolesPage from "../views/Roles/roles";
 
+// Rooms
+import RoomList from "../views/Room/room-list";
+import RoomForm from "../views/Room/room-create";
+
 const routes = [
   { path: "/home", element: <HomePage /> },
   { path: "/profile", element: <ProfilePage /> },
@@ -34,6 +38,10 @@ const routes = [
   { path: "/patients/edit/:id", element: <PatientForm /> },
 
   { path: "/roles", element: <RolesPage /> },
+
+  { path: "/rooms/list", element: <RoomList /> },
+  { path: "/rooms/create", element: <RoomForm /> },
+  { path: "/rooms/edit/:id", element: <RoomForm /> },
 ];
 
 export default routes;

@@ -241,6 +241,43 @@ const SideMenu = () => {
                   <span>Roles</span>
                 </NavLink>
               </Nav.Item>
+
+              {/* Room menu with subitems */}
+              <Nav.Item>
+                <Nav.Link
+                  onClick={() => toggleSubMenu("rooms")}
+                  className={`text-dark ${
+                    activeKey === "/rooms" ? "bg-selected" : ""
+                  }`}
+                >
+                  <FaCog className="me-2" />
+                  <span>Rooms</span>
+                </Nav.Link>
+                {openSubMenu === "rooms" && (
+                  <Nav className="flex-column ps-3 pt-0">
+                    <Nav.Item className="pb-2">
+                      <NavLink
+                        to="/rooms/list"
+                        className={`text-dark ${
+                          activeKey === "/rooms/list" ? "bg-selected" : ""
+                        }`}
+                      >
+                        Rooms List
+                      </NavLink>
+                    </Nav.Item>
+                    <Nav.Item className="pb-2">
+                      <NavLink
+                        to="/rooms/create"
+                        className={`text-dark ${
+                          activeKey === "/rooms/create" ? "bg-selected" : ""
+                        }`}
+                      >
+                        Rooms Create
+                      </NavLink>
+                    </Nav.Item>
+                  </Nav>
+                )}
+              </Nav.Item>
             </Nav>
           </Navbar>
         </div>
