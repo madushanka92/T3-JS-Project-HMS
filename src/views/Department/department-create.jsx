@@ -56,7 +56,9 @@ const DepartmentForm = () => {
 
   return (
     <div className="container">
-      <h2>{id ? "Edit Department" : "Create Department"}</h2>
+      <h2 className="text-start">
+        {id ? "Edit Department" : "Create Department"}
+      </h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Department Name</label>

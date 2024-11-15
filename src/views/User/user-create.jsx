@@ -104,122 +104,130 @@ const UserRegistrationForm = ({ message, onSubmit }) => {
 
   return (
     <div className="container">
-      <h2>{userId ? "Edit User" : "User Registration Form"}</h2>
+      <h2 className="text-start">
+        {userId ? "Edit User" : "User Registration Form"}
+      </h2>
 
       {message && <p style={{ color: "red" }}>{message}</p>}
 
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="firstName">First Name:</label>
-          <input
-            type="text"
-            id="firstName"
-            name="firstName"
-            required
-            className="form-control"
-            value={userData.firstName}
-            onChange={handleChange}
-          />
-        </div>
+        <div className="row">
+          <div className="col-md-6">
+            <div className="form-group">
+              <label htmlFor="firstName">First Name:</label>
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                required
+                className="form-control"
+                value={userData.firstName}
+                onChange={handleChange}
+              />
+            </div>
 
-        <div className="form-group">
-          <label htmlFor="lastName">Last Name:</label>
-          <input
-            type="text"
-            id="lastName"
-            name="lastName"
-            required
-            className="form-control"
-            value={userData.lastName}
-            onChange={handleChange}
-          />
-        </div>
+            <div className="form-group">
+              <label htmlFor="lastName">Last Name:</label>
+              <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                required
+                className="form-control"
+                value={userData.lastName}
+                onChange={handleChange}
+              />
+            </div>
 
-        <div className="form-group">
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            required
-            className="form-control"
-            value={userData.email}
-            onChange={handleChange}
-          />
-        </div>
+            <div className="form-group">
+              <label htmlFor="email">Email:</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                className="form-control"
+                value={userData.email}
+                onChange={handleChange}
+              />
+            </div>
 
-        <div className="form-group">
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            required
-            className="form-control"
-            value={userData.password}
-            onChange={handleChange}
-          />
-        </div>
+            <div className="form-group">
+              <label htmlFor="password">Password:</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                required
+                className="form-control"
+                value={userData.password}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
 
-        <div className="form-group">
-          <label htmlFor="role">Role:</label>
-          <select
-            id="role"
-            name="roleId"
-            required
-            className="form-control"
-            value={userData.roleId}
-            onChange={handleChange}
-          >
-            <option value="">Select a role</option>
-            {roles?.map((role) => (
-              <option key={role._id} value={role._id}>
-                {role.roleName}
-              </option>
-            ))}
-          </select>
-        </div>
+          <div className="col-md-6">
+            <div className="form-group">
+              <label htmlFor="role">Role:</label>
+              <select
+                id="role"
+                name="roleId"
+                required
+                className="form-control"
+                value={userData.roleId}
+                onChange={handleChange}
+              >
+                <option value="">Select a role</option>
+                {roles?.map((role) => (
+                  <option key={role._id} value={role._id}>
+                    {role.roleName}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-        <div className="form-group">
-          <label htmlFor="department">Department:</label>
-          <select
-            required
-            id="department"
-            name="departmentId"
-            className="form-control"
-            value={userData.departmentId}
-            onChange={handleChange}
-          >
-            <option value="">Select a department</option>
-            {departments?.map((department) => (
-              <option key={department._id} value={department._id}>
-                {department.departmentName}
-              </option>
-            ))}
-          </select>
-        </div>
+            <div className="form-group">
+              <label htmlFor="department">Department:</label>
+              <select
+                required
+                id="department"
+                name="departmentId"
+                className="form-control"
+                value={userData.departmentId}
+                onChange={handleChange}
+              >
+                <option value="">Select a department</option>
+                {departments?.map((department) => (
+                  <option key={department._id} value={department._id}>
+                    {department.departmentName}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-        <div className="form-group">
-          <label htmlFor="contactNumber">Contact Number:</label>
-          <input
-            type="text"
-            id="contactNumber"
-            name="contactNumber"
-            className="form-control"
-            value={userData.contactNumber}
-            onChange={handleChange}
-          />
-        </div>
+            <div className="form-group">
+              <label htmlFor="contactNumber">Contact Number:</label>
+              <input
+                type="text"
+                id="contactNumber"
+                name="contactNumber"
+                className="form-control"
+                value={userData.contactNumber}
+                onChange={handleChange}
+              />
+            </div>
 
-        <div className="form-group">
-          <label htmlFor="address">Address:</label>
-          <textarea
-            id="address"
-            name="address"
-            className="form-control"
-            value={userData.address}
-            onChange={handleChange}
-          />
+            <div className="form-group">
+              <label htmlFor="address">Address:</label>
+              <textarea
+                id="address"
+                name="address"
+                className="form-control"
+                value={userData.address}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
         </div>
 
         <button type="submit" className="btn btn-primary">

@@ -51,7 +51,7 @@ const PatientForm = () => {
 
   return (
     <div className="container">
-      <h2>{id ? "Edit Patient" : "Add Patient"}</h2>
+      <h2 className="text-start">{id ? "Edit Patient" : "Add Patient"}</h2>
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       <form onSubmit={handleSubmit}>

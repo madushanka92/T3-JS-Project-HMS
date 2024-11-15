@@ -46,7 +46,7 @@ const UserListPage = () => {
 
   return (
     <div className="container user-list">
-      <h2>All Users</h2>
+      <h2 className="text-start">All Users</h2>
 
       {error && <p style={{ color: "red" }}>{error}</p>}
 

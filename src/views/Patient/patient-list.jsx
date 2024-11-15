@@ -29,7 +29,7 @@ const PatientListPage = () => {
 
   return (
     <div className="container">
-      <h2>Patient List</h2>
+      <h2 className="text-start">Patient List</h2>
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       <button

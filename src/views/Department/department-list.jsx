@@ -30,7 +30,7 @@ const DepartmentList = () => {
 
   return (
     <div className="container department-list">
-      <h2>Department List</h2>
+      <h2 className="text-start">Department List</h2>
       <button
         onClick={() => navigate("/departments/create")}
         className="btn btn-primary add-new"
