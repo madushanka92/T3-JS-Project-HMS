@@ -10,6 +10,10 @@ import UserPage from "../views/UserPage";
 import DepartmentList from "../views/Department/department-list";
 import DepartmentForm from "../views/Department/department-create";
 
+// Patient
+import PatientListPage from "../views/Patient/patient-list";
+import PatientForm from "../views/Patient/patient-create";
+
 const routes = [
   { path: "/home", element: <HomePage /> },
   { path: "/profile", element: <ProfilePage /> },
@@ -21,6 +25,10 @@ const routes = [
   { path: "/departments/list", element: <DepartmentList /> },
   { path: "/departments/create", element: <DepartmentForm /> },
   { path: "/departments/edit/:id", element: <DepartmentForm /> },
+
+  { path: "/patients/list", element: <PatientListPage /> },
+  { path: "/patients/create", element: <PatientForm /> },
+  { path: "/patients/edit/:id", element: <PatientForm /> },
 ];
 
 export default routes;

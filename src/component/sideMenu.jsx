@@ -192,6 +192,43 @@ const SideMenu = () => {
                   </Nav>
                 )}
               </Nav.Item>
+
+              {/* Patient menu with subitems */}
+              <Nav.Item>
+                <Nav.Link
+                  onClick={() => toggleSubMenu("patients")}
+                  className={`text-dark ${
+                    activeKey === "/patients" ? "bg-selected" : ""
+                  }`}
+                >
+                  <FaCog className="me-2" />
+                  <span>Patients</span>
+                </Nav.Link>
+                {openSubMenu === "patients" && (
+                  <Nav className="flex-column ps-3">
+                    <Nav.Item>
+                      <Nav.Link
+                        href="/patients/list"
+                        className={`text-dark ${
+                          activeKey === "/patients/list" ? "bg-selected" : ""
+                        }`}
+                      >
+                        Patients List
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                      <Nav.Link
+                        href="/patients/create"
+                        className={`text-dark ${
+                          activeKey === "/patients/create" ? "bg-selected" : ""
+                        }`}
+                      >
+                        Patients Create
+                      </Nav.Link>
+                    </Nav.Item>
+                  </Nav>
+                )}
+              </Nav.Item>
             </Nav>
           </Navbar>
         </div>

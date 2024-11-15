@@ -36,4 +36,13 @@ const departmentService = {
     deleteDepartment: (id) => api.delete(`/departments/${id}`),
 };
 
-export { userService, roleService, departmentService };
+// Patient API
+const patientService = {
+    getAllPatients: () => api.get("/patients"),
+    getPatientById: (id) => api.get(`/patients/${id}`),
+    createPatient: (patientData) => api.post('/patients', patientData),
+    updatePatient: (id, patientData) => api.put(`/patients/${id}`, patientData),
+    deletePatient: (id) => api.delete(`/patients/${id}`),
+};
+
+export { userService, roleService, departmentService, patientService };
