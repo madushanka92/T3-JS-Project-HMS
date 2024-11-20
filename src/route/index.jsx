@@ -21,9 +21,13 @@ import RolesPage from "../views/Roles/roles";
 import RoomList from "../views/Room/room-list";
 import RoomForm from "../views/Room/room-create";
 
+// Features
+import FeaturePage from "../views/Features/features";
+import FeatureMappingPage from "../views/Features/featureMapping";
+
 const routes = [
   { path: "/home", element: <HomePage /> },
-  { path: "/profile", element: <ProfilePage /> },
+  { path: "/profile/:id", element: <ProfilePage /> },
   { path: "/users/create", element: <UserRegistrationForm /> },
   { path: "/users/edit/:userId", element: <UserRegistrationForm /> },
   { path: "/users/list", element: <UserListPage /> },
@@ -42,6 +46,14 @@ const routes = [
   { path: "/rooms/list", element: <RoomList /> },
   { path: "/rooms/create", element: <RoomForm /> },
   { path: "/rooms/edit/:id", element: <RoomForm /> },
+
+  { path: "/feature/list", element: <FeaturePage /> },
+  { path: "/feature/create", element: <FeaturePage /> },
+  { path: "/feature/edit/:id", element: <FeaturePage /> },
+
+  { path: "/featureMapping/list", element: <FeatureMappingPage /> },
+  { path: "/featureMapping/create", element: <FeatureMappingPage /> },
+  { path: "/featureMapping/edit/:id", element: <FeatureMappingPage /> },
 ];
 
 export default routes;

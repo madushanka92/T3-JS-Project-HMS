@@ -53,4 +53,26 @@ const roomService = {
     deleteRoom: (id) => api.delete(`/rooms/${id}`),
 };
 
-export { userService, roleService, departmentService, patientService, roomService };
+// Feature API
+const featureService = {
+    getAllFeatures: () => api.get("/features"),
+    getFeatureById: (id) => api.get(`/features/${id}`),
+    createFeature: (featureData) => api.post("/features", featureData),
+    updateFeature: (id, featureData) => api.put(`/features/${id}`, featureData),
+    deleteFeature: (id) => api.delete(`/features/${id}`),
+};
+
+// FeatureMapping API
+const featureMappingService = {
+    getAllMappings: () => api.get("/featureMappings"),
+    getMappingById: (id) => api.get(`/featureMappings/${id}`),
+    createMapping: (mappingData) => api.post("/featureMappings", mappingData),
+    updateMapping: (id, mappingData) => api.put(`/featureMappings/${id}`, mappingData),
+    deleteMapping: (id) => api.delete(`/featureMappings/${id}`),
+};
+
+export {
+    userService, roleService, departmentService, patientService, roomService,
+    featureService,
+    featureMappingService,
+};

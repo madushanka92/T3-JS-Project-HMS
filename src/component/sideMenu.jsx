@@ -56,7 +56,7 @@ const SideMenu = () => {
                   <Nav className="flex-column ps-3 pt-0">
                     <Nav.Item>
                       <NavLink
-                        to="/profile"
+                        to="/profile/673506e1b9a39ac4ea596476"
                         className={`text-dark ${
                           activeKey === "/profile" ? "bg-selected" : ""
                         }`}
@@ -64,7 +64,7 @@ const SideMenu = () => {
                         Profile Details
                       </NavLink>
                     </Nav.Item>
-                    <Nav.Item>
+                    {/* <Nav.Item>
                       <NavLink
                         to="/profile/edit"
                         className={`text-dark ${
@@ -73,7 +73,7 @@ const SideMenu = () => {
                       >
                         Edit Profile
                       </NavLink>
-                    </Nav.Item>
+                    </Nav.Item> */}
                   </Nav>
                 )}
               </Nav.Item>
@@ -273,6 +273,45 @@ const SideMenu = () => {
                         }`}
                       >
                         Rooms Create
+                      </NavLink>
+                    </Nav.Item>
+                  </Nav>
+                )}
+              </Nav.Item>
+
+              {/* Features menu with subitems */}
+              <Nav.Item>
+                <Nav.Link
+                  onClick={() => toggleSubMenu("feature")}
+                  className={`text-dark ${
+                    activeKey === "/feature" ? "bg-selected" : ""
+                  }`}
+                >
+                  <FaCog className="me-2" />
+                  <span>Feature</span>
+                </Nav.Link>
+                {openSubMenu === "feature" && (
+                  <Nav className="flex-column ps-3 pt-0">
+                    <Nav.Item className="pb-2">
+                      <NavLink
+                        to="/feature/list"
+                        className={`text-dark ${
+                          activeKey === "/feature/list" ? "bg-selected" : ""
+                        }`}
+                      >
+                        Feature List
+                      </NavLink>
+                    </Nav.Item>
+                    <Nav.Item className="pb-2">
+                      <NavLink
+                        to="/featureMapping/list"
+                        className={`text-dark ${
+                          activeKey === "/featureMapping/list"
+                            ? "bg-selected"
+                            : ""
+                        }`}
+                      >
+                        Feature Mapping
                       </NavLink>
                     </Nav.Item>
                   </Nav>
