@@ -18,13 +18,13 @@ const RolesPage = () => {
       .catch((err) => setError("Failed to load roles."));
   }, []);
 
-  // Add or Edit
+  // Save new or edited role
   const handleSaveRole = () => {
     if (roleName.trim()) {
       const roleData = { roleName };
 
       if (mode === "create") {
-        // new role
+        // New role
         roleService
           .createRole(roleData)
           .then(() => {
@@ -33,7 +33,7 @@ const RolesPage = () => {
           })
           .catch(() => setError("Failed to add role."));
       } else if (mode === "edit" && selectedRole) {
-        // Edit role
+        // Edit existing role
         roleService
           .updateRole(selectedRole._id, roleData)
           .then(() => {
@@ -51,25 +51,33 @@ const RolesPage = () => {
     }
   };
 
-  // edit button click
+  // Edit button click
   const handleEditRole = (role) => {
     setSelectedRole(role);
     setRoleName(role.roleName);
     setMode("edit"); // Switch to edit mode
   };
 
-  // delete button click
+  // Delete button click
   const handleDeleteRole = (id) => {
     if (window.confirm("Are you sure you want to delete this role?")) {
       roleService
         .deleteRole(id)
-        .then(() =>
-          setRoles((prevRoles) => prevRoles.filter((role) => role._id !== id))
-        )
-        .catch(() => setError("Failed to delete role."));
+        .then(() => {
+          setRoles((prevRoles) => prevRoles.filter((role) => role._id !== id));
+          setError("");
+        })
+        .catch((error) => {
+          if (error.response && error.response.data) {
+            setError(error.response.data.message); // Display backend error message
+          } else {
+            setError("Failed to delete role.");
+          }
+        });
     }
   };
 
+  // Cancel button click (reset state)
   const handleCancel = () => {
     setRoleName("");
     setSelectedRole(null);
