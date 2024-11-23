@@ -12,7 +12,7 @@ const AdmissionList = () => {
     const fetchAdmissions = async () => {
       setIsLoading(true);
       try {
-        const response = await admissionService.getAllAdmissions(); // Assuming this API exists
+        const response = await admissionService.getAllAdmissions();
         setAdmissions(response.data);
       } catch (error) {
         console.error("Error fetching admissions", error);
@@ -27,7 +27,7 @@ const AdmissionList = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this admission?")) {
       try {
-        await admissionService.deleteAdmission(id); // Assuming this API exists
+        await admissionService.deleteAdmission(id);
         setAdmissions(admissions.filter((admission) => admission._id !== id));
         alert("Admission deleted successfully");
       } catch (error) {

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../assets/css/component/sideMenu.scss";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { Nav, Navbar, Container } from "react-bootstrap";
-import { FaHome, FaUser, FaCog } from "react-icons/fa"; // Using react-icons for icons
+import { FaHome, FaUser, FaCog, FaHospitalUser, FaBuilding , FaHeartbeat, FaPeopleArrows, FaHospital} from "react-icons/fa"; // Using react-icons for icons
 import { FaMoneyCheck, FaUserPlus } from "react-icons/fa6";
 
 const SideMenu = () => {
@@ -74,7 +74,7 @@ const SideMenu = () => {
               </Nav.Item>
 
               {/* Settings menu with subitems */}
-              <Nav.Item>
+              {/* <Nav.Item>
                 <Nav.Link
                   onClick={() => toggleSubMenu("settings")}
                   className={`text-dark ${
@@ -110,7 +110,7 @@ const SideMenu = () => {
                     </Nav.Item>
                   </Nav>
                 )}
-              </Nav.Item>
+              </Nav.Item> */}
 
               {/* Users menu with subitems */}
               <Nav.Item>
@@ -120,7 +120,7 @@ const SideMenu = () => {
                     activeKey === "/settings" ? "bg-selected" : ""
                   }`}
                 >
-                  <FaCog className="me-2" />
+                  <FaHospitalUser className="me-2" />
                   <span>Users</span>
                 </Nav.Link>
                 {openSubMenu === "users" && (
@@ -157,7 +157,7 @@ const SideMenu = () => {
                     activeKey === "/departments" ? "bg-selected" : ""
                   }`}
                 >
-                  <FaCog className="me-2" />
+                  <FaBuilding className="me-2" />
                   <span>Departments</span>
                 </Nav.Link>
                 {openSubMenu === "departments" && (
@@ -196,7 +196,7 @@ const SideMenu = () => {
                     activeKey === "/patients" ? "bg-selected" : ""
                   }`}
                 >
-                  <FaCog className="me-2" />
+                  <FaHeartbeat className="me-2" />
                   <span>Patients</span>
                 </Nav.Link>
                 {openSubMenu === "patients" && (
@@ -232,7 +232,7 @@ const SideMenu = () => {
                     activeKey === "/roles" ? "bg-selected" : ""
                   }`}
                 >
-                  <FaHome className="me-2" />
+                  <FaPeopleArrows className="me-2" />
                   <span>Roles</span>
                 </NavLink>
               </Nav.Item>
@@ -245,7 +245,7 @@ const SideMenu = () => {
                     activeKey === "/rooms" ? "bg-selected" : ""
                   }`}
                 >
-                  <FaCog className="me-2" />
+                  <FaHospital className="me-2" />
                   <span>Rooms</span>
                 </Nav.Link>
                 {openSubMenu === "rooms" && (

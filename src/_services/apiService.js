@@ -11,12 +11,14 @@ const api = axios.create({
 
 // User API
 const userService = {
-    getAllUsers: () => api.get("/users"),
+    getAllUsers: (roleName) => {
+        const url = roleName ? `/users?role=${roleName}` : '/users';
+        return api.get(url);
+    },
     getUserById: (id) => api.get(`/users/${id}`),
     createUser: (userData) => api.post("/users", userData),
     updateUser: (id, userData) => api.put(`/users/${id}`, userData),
     deleteUser: (id) => api.delete(`/users/${id}`),
-
 
     loginUser: (userData) => api.post("/users/login", userData),
 };
@@ -88,6 +90,30 @@ const statisticsService = {
     getTotalCounts: () => api.get("/statistics/counts")
 }
 
+const doctorAssignmentService = {
+    createAssignment: (assignmentData) => api.post("/doctorPatient/assignments", assignmentData),
+    getAllAssignments: () => api.get("/doctorPatient/assignments"),
+    deleteAssignment: (id) => api.delete(`/doctorPatient/assignments/${id}`),
+}
+
+const nurseAssignmentService = {
+    createAssignment: (assignmentData) => api.post("/nurseDoctor/assignments", assignmentData),
+    getAllAssignments: () => api.get("/nurseDoctor/assignments"),
+    deleteAssignment: (id) => api.delete(`/nurseDoctor/assignments/${id}`),
+}
+
+const techDepartmentAssignmentService = {
+    createAssignment: (assignmentData) => api.post("/technicianDepartment/assignments", assignmentData),
+    getAllAssignments: () => api.get("/technicianDepartment/assignments"),
+    deleteAssignment: (id) => api.delete(`/technicianDepartment/assignments/${id}`),
+}
+
+const techPatientAssignmentService = {
+    createAssignment: (assignmentData) => api.post("/technicianPatient/assignments", assignmentData),
+    getAllAssignments: () => api.get("/technicianPatient/assignments"),
+    deleteAssignment: (id) => api.delete(`/technicianPatient/assignments/${id}`),
+}
+
 export {
     userService,
     roleService,
@@ -97,5 +123,6 @@ export {
     admissionService,
     featureService,
     featureMappingService,
-    statisticsService
+    statisticsService,
+    doctorAssignmentService, nurseAssignmentService, techDepartmentAssignmentService, techPatientAssignmentService
 };

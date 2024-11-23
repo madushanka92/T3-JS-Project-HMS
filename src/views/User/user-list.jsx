@@ -30,7 +30,7 @@ const UserListPage = () => {
     );
     if (confirmDelete) {
       userService
-        .deleteUser(userId) // Assuming you have a deleteUser method in your userService
+        .deleteUser(userId)
         .then(() => {
           // After deleting, remove the user from the list without re-fetching
           setUsers((prevUsers) =>
