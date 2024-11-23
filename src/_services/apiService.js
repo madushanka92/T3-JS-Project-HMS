@@ -45,12 +45,22 @@ const patientService = {
     deletePatient: (id) => api.delete(`/patients/${id}`),
 };
 
+// Room API
 const roomService = {
     getAllRooms: () => api.get('/rooms'),
     getRoomById: (id) => api.get(`/rooms/${id}`),
     createRoom: (roomData) => api.post('/rooms', roomData),
     updateRoom: (id, roomData) => api.put(`/rooms/${id}`, roomData),
     deleteRoom: (id) => api.delete(`/rooms/${id}`),
+};
+
+// Admission API
+const admissionService = {
+    getAllAdmissions: () => api.get("/admissions"),
+    getAdmissionById: (id) => api.get(`/admissions/${id}`),
+    createAdmission: (admissionData) => api.post("/admissions", admissionData),
+    updateAdmission: (id, admissionData) => api.put(`/admissions/${id}`, admissionData),
+    deleteAdmission: (id) => api.delete(`/admissions/${id}`),
 };
 
 // Feature API
@@ -72,7 +82,12 @@ const featureMappingService = {
 };
 
 export {
-    userService, roleService, departmentService, patientService, roomService,
+    userService,
+    roleService,
+    departmentService,
+    patientService,
+    roomService,
+    admissionService,
     featureService,
     featureMappingService,
 };

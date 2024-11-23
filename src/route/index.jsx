@@ -25,6 +25,10 @@ import RoomForm from "../views/Room/room-create";
 import FeaturePage from "../views/Features/features";
 import FeatureMappingPage from "../views/Features/featureMapping";
 
+// Admissions
+import AdmissionCreateForm from "../views/Admission/admission-create";
+import AdmissionList from "../views/Admission/admission-list";
+
 const routes = [
   { path: "/home", element: <HomePage /> },
   { path: "/profile/:id", element: <ProfilePage /> },
@@ -54,6 +58,10 @@ const routes = [
   { path: "/featureMapping/list", element: <FeatureMappingPage /> },
   { path: "/featureMapping/create", element: <FeatureMappingPage /> },
   { path: "/featureMapping/edit/:id", element: <FeatureMappingPage /> },
+
+  { path: "/admissions/create", element: <AdmissionCreateForm /> },
+  { path: "/admissions/edit/:id", element: <AdmissionCreateForm /> },
+  { path: "/admissions/list", element: <AdmissionList /> },
 ];
 
 export default routes;
