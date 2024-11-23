@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import OverviewData from "../component/overviewData";
 import {
   FaStethoscope,
@@ -12,16 +12,62 @@ import "../assets/css/HomePage.scss";
 
 import BarChart from "../component/chats/bar-chat";
 import LineChart from "../component/chats/line-chat";
+import { statisticsService } from "../_services/apiService";
 
 const HomePage = () => {
+  const [counts, setCounts] = useState({
+    doctors: 0,
+    nurses: 0,
+    patients: 0,
+    appointments: 30, // Default values
+    operations: 30, // Default values
+    labReports: 30, // Default values
+  });
+
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    // Fetch user data from localStorage
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (user && user.role === "Admin") {
+      setIsAdmin(true);
+    }
+
+    // Fetch total counts for doctors, nurses, patients, etc.
+    statisticsService
+      .getTotalCounts()
+      .then((response) => {
+        setCounts({
+          doctors: response.data.doctors,
+          nurses: response.data.nurses,
+          patients: response.data.patients,
+          appointments: response.data.admissions, // Default or fetched value
+          operations: 30, // Default or fetched value
+          labReports: 30, // Default or fetched value
+        });
+      })
+      .catch((err) => {
+        console.error("Error fetching counts:", err);
+      });
+  }, []);
+
   const overviewDataArray = [
-    { total: 20, type: "Doctors", icon: <FaStethoscope /> },
-    { total: 50, type: "Nurse", icon: <FaUserNurse /> },
-    { total: 15, type: "Patient", icon: <FaHeartbeat /> },
-    { total: 30, type: "Appointment", icon: <FaCommentsDollar /> },
-    { total: 30, type: "Operation", icon: <FaCut /> },
-    { total: 30, type: "Lab Reports", icon: <FaNotesMedical /> },
+    { total: counts.doctors, type: "Doctors", icon: <FaStethoscope /> },
+    { total: counts.nurses, type: "Nurse", icon: <FaUserNurse /> },
+    { total: counts.patients, type: "Patient", icon: <FaHeartbeat /> },
+    {
+      total: counts.appointments,
+      type: "Admissions",
+      icon: <FaCommentsDollar />,
+    },
+    { total: counts.operations, type: "Operation", icon: <FaCut /> },
+    { total: counts.labReports, type: "Lab Reports", icon: <FaNotesMedical /> },
   ];
+
+  const handleEdit = (userId) => {
+    navigate(`/users/edit/${userId}`);
+  };
 
   const Utils = {
     months: ({ count }) => {
@@ -96,10 +142,12 @@ const HomePage = () => {
         </div>
       </div>
 
-      <div className="chats">
-        <BarChart data={data} options={options} />
-        <LineChart data={data} options={options} />
-      </div>
+      {isAdmin && ( // Only render charts if the user is an Admin
+        <div className="chats">
+          <BarChart data={data} options={options} />
+          <LineChart data={data} options={options} />
+        </div>
+      )}
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import bcrypt from "bcryptjs";
 import {
   roleService,
   departmentService,
@@ -33,6 +34,7 @@ const UserRegistrationForm = ({ message, onSubmit }) => {
           let data = { ...response.data };
           data.roleId = response.data.roleId?._id;
           data.departmentId = response.data.departmentId?._id;
+          data.password = "";
           setUserData(data);
         })
         .catch((err) => {
@@ -68,37 +70,52 @@ const UserRegistrationForm = ({ message, onSubmit }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (userId) {
-      // Update existing user
-      userService
-        .updateUser(userId, userData)
-        .then((response) => {
-          console.log("User updated successfully:", response);
-          navigate("/users/list");
-          if (onSubmit) {
-            onSubmit(response);
-          }
-        })
-        .catch((err) => {
-          console.error("Error updating user:", err);
-        });
-    } else {
-      // Create new user if no userId
-      userService
-        .createUser(userData)
-        .then((response) => {
-          console.log("User created successfully:", response);
-          navigate("/users/list");
-          if (onSubmit) {
-            onSubmit(response);
-          }
-        })
-        .catch((err) => {
-          console.error("Error creating user:", err);
-        });
+    try {
+      let updatedUserData = { ...userData };
+
+      // Check if a new password is entered (only in edit mode)
+      if (userData.password.trim() !== "") {
+        // Hash the new password
+        updatedUserData.password = await bcrypt.hash(userData.password, 10);
+      } else {
+        // If no password entered, retain the current password in edit mode
+        delete updatedUserData.password;
+      }
+
+      if (userId) {
+        // Update existing user
+        userService
+          .updateUser(userId, updatedUserData)
+          .then((response) => {
+            console.log("User updated successfully:", response);
+            navigate("/users/list");
+            if (onSubmit) {
+              onSubmit(response);
+            }
+          })
+          .catch((err) => {
+            console.error("Error updating user:", err);
+          });
+      } else {
+        // Create new user
+        userService
+          .createUser(updatedUserData)
+          .then((response) => {
+            console.log("User created successfully:", response);
+            navigate("/users/list");
+            if (onSubmit) {
+              onSubmit(response);
+            }
+          })
+          .catch((err) => {
+            console.error("Error creating user:", err);
+          });
+      }
+    } catch (error) {
+      console.error("Error handling password:", error);
     }
   };
 
@@ -152,13 +169,20 @@ const UserRegistrationForm = ({ message, onSubmit }) => {
               />
             </div>
 
+            {/* Show password field for both create and edit mode, but only encrypt if the password is provided */}
             <div className="form-group">
-              <label htmlFor="password">Password:</label>
+              <label htmlFor="password">
+                Password:{" "}
+                <small className="text-muted">
+                  {userId
+                    ? "(Leave blank to keep the current password)"
+                    : "(Required)"}
+                </small>
+              </label>
               <input
                 type="password"
                 id="password"
                 name="password"
-                required
                 className="form-control"
                 value={userData.password}
                 onChange={handleChange}

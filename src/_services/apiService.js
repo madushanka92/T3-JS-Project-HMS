@@ -16,6 +16,9 @@ const userService = {
     createUser: (userData) => api.post("/users", userData),
     updateUser: (id, userData) => api.put(`/users/${id}`, userData),
     deleteUser: (id) => api.delete(`/users/${id}`),
+
+
+    loginUser: (userData) => api.post("/users/login", userData),
 };
 
 // Role API
@@ -81,6 +84,10 @@ const featureMappingService = {
     deleteMapping: (id) => api.delete(`/featureMappings/${id}`),
 };
 
+const statisticsService = {
+    getTotalCounts: () => api.get("/statistics/counts")
+}
+
 export {
     userService,
     roleService,
@@ -90,4 +97,5 @@ export {
     admissionService,
     featureService,
     featureMappingService,
+    statisticsService
 };

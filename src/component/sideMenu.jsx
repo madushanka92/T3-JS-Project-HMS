@@ -20,6 +20,9 @@ const SideMenu = () => {
     setOpenSubMenu(openSubMenu === menu ? null : menu); // Toggle the submenu
   };
 
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userId = user ? user._id : null;
+
   return (
     <div className="side-menu">
       <div className="d-flex">
@@ -56,24 +59,16 @@ const SideMenu = () => {
                   <Nav className="flex-column ps-3 pt-0">
                     <Nav.Item>
                       <NavLink
-                        to="/profile/673506e1b9a39ac4ea596476"
+                        to={`/profile/${userId}`} // Dynamically setting the user id
                         className={`text-dark ${
-                          activeKey === "/profile" ? "bg-selected" : ""
+                          activeKey === `/profile/${userId}`
+                            ? "bg-selected"
+                            : ""
                         }`}
                       >
                         Profile Details
                       </NavLink>
                     </Nav.Item>
-                    {/* <Nav.Item>
-                      <NavLink
-                        to="/profile/edit"
-                        className={`text-dark ${
-                          activeKey === "/profile/edit" ? "bg-selected" : ""
-                        }`}
-                      >
-                        Edit Profile
-                      </NavLink>
-                    </Nav.Item> */}
                   </Nav>
                 )}
               </Nav.Item>

@@ -12,6 +12,7 @@ const UserProfile = () => {
     email: "",
     contactNumber: "",
     address: "",
+    password: "", // Add password to the form data
   });
 
   // Fetch user data on component mount
@@ -26,6 +27,7 @@ const UserProfile = () => {
           email: response.data.email,
           contactNumber: response.data.contactNumber || "",
           address: response.data.address || "",
+          password: "", // Initialize password as empty
         });
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -42,7 +44,13 @@ const UserProfile = () => {
 
   const handleSaveChanges = async () => {
     try {
-      const response = await userService.updateUser(id, formData); // Use the userService API
+      // Only include the password if it's been changed
+      const updatedData = {
+        ...formData,
+        password: formData.password ? formData.password : undefined, // If password is empty, don't send it
+      };
+
+      const response = await userService.updateUser(id, updatedData); // Use the userService API
       setUser(response.data); // Update the user data
       setEditMode(false); // Exit edit mode
     } catch (error) {
@@ -122,6 +130,21 @@ const UserProfile = () => {
               disabled={!editMode}
             ></textarea>
           </div>
+
+          {/* Password field visible only when in edit mode */}
+          {editMode && (
+            <div className="mb-3">
+              <label>New Password</label>
+              <input
+                type="password"
+                name="password"
+                className="form-control"
+                value={formData.password}
+                onChange={handleInputChange}
+              />
+            </div>
+          )}
+
           {editMode && (
             <div className="d-flex justify-content-end">
               <button
