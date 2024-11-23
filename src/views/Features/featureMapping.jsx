@@ -218,8 +218,8 @@ const FeatureMappingPage = () => {
         <tbody>
           {featureMappings.map((mapping) => (
             <tr key={mapping._id}>
-              <td>{mapping.roleId.roleName}</td>
-              <td>{mapping.featureId.featureName}</td>
+              <td>{mapping.roleId?.roleName}</td>
+              <td>{mapping.featureId?.featureName}</td>
               <td>{mapping.canCreate ? "Yes" : "No"}</td>
               <td>{mapping.canRead ? "Yes" : "No"}</td>
               <td>{mapping.canUpdate ? "Yes" : "No"}</td>

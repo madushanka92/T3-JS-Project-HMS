@@ -9,6 +9,9 @@ const FeaturePage = () => {
   });
   const [editFeature, setEditFeature] = useState(null);
 
+  const [error, setError] = useState(""); // To store error messages
+  const [successMessage, setSuccessMessage] = useState(""); // To store success messages
+
   useEffect(() => {
     const fetchFeatures = async () => {
       try {
@@ -57,9 +60,22 @@ const FeaturePage = () => {
     try {
       await featureService.deleteFeature(id);
       const response = await featureService.getAllFeatures(); // Refresh the list
+
+      setSuccessMessage("Feature deleted successfully.");
+      setError("");
       setFeatures(response.data);
     } catch (error) {
       console.error("Error deleting feature", error);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        setError(error.response.data.message);
+      } else {
+        setError("An error occurred while deleting the feature.");
+      }
+      setSuccessMessage(""); // Clear any previous success messages
     }
   };
 
@@ -106,8 +122,13 @@ const FeaturePage = () => {
           </div>
         </div>
       </div>
-
       <h3 className="mt-4">Features List</h3>
+      {error && <div className="alert alert-danger">{error}</div>}{" "}
+      {/* Display error message */}
+      {successMessage && (
+        <div className="alert alert-success">{successMessage}</div>
+      )}{" "}
+      {/* Display success message */}
       <div className="list-group">
         {features.map((feature) => (
           <div
@@ -127,7 +148,7 @@ const FeaturePage = () => {
               </button>
               <button
                 className="btn btn-danger btn-sm"
-                onClick={() => handleDeleteFeature(feature.featureId)}
+                onClick={() => handleDeleteFeature(feature._id)}
               >
                 Delete
               </button>
