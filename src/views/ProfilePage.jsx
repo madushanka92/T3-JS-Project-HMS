@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom"; // For accessing the user ID from the route
 import { userService } from "../_services/apiService"; // Import the userService
+import { getFeatureAccess } from "../_services/helpers"; // Assuming you have this helper function for checking access
 
 const UserProfile = () => {
   const { id } = useParams(); // Get the user ID from the route
@@ -15,7 +16,9 @@ const UserProfile = () => {
     password: "", // Add password to the form data
   });
 
-  // Fetch user data on component mount
+  // Get the access for the 'UserProfile' feature (canUpdate)
+  const access = getFeatureAccess("UserProfile");
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -66,7 +69,8 @@ const UserProfile = () => {
       <div className="card mt-4">
         <div className="card-header d-flex justify-content-between">
           <h2>{editMode ? "Edit Profile" : "Profile Details"}</h2>
-          {!editMode && (
+          {/* Only show the "Edit Profile" button if the user has 'canUpdate' access */}
+          {access.canUpdate && !editMode && (
             <button
               className="btn btn-primary"
               onClick={() => setEditMode(true)}

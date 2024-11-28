@@ -1,14 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form, Button, Container, Row, Col, Card } from "react-bootstrap";
 import "../assets/css/LoginPage.scss";
-import { userService } from "../_services/apiService";
+import { featureMappingService, userService } from "../_services/apiService";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("admin@hms.com");
   const [password, setPassword] = useState("admin");
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    localStorage.clear();
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -20,7 +24,21 @@ const LoginPage = () => {
 
         localStorage.setItem("authToken", token);
         localStorage.setItem("user", JSON.stringify(user));
-        navigate("/home");
+        //
+
+        featureMappingService
+          .getByRoleName(user.role)
+          .then((features) => {
+            localStorage.setItem(
+              "featureSettings",
+              JSON.stringify(features.data)
+            );
+            navigate("/home");
+          })
+          .catch(() => {
+            localStorage.setItem("featureSettings", []);
+            navigate("/home");
+          });
       })
       .catch((err) => {
         console.log("Err : ", err);

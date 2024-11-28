@@ -75,6 +75,7 @@ const featureService = {
     createFeature: (featureData) => api.post("/features", featureData),
     updateFeature: (id, featureData) => api.put(`/features/${id}`, featureData),
     deleteFeature: (id) => api.delete(`/features/${id}`),
+
 };
 
 // FeatureMapping API
@@ -84,6 +85,7 @@ const featureMappingService = {
     createMapping: (mappingData) => api.post("/featureMappings", mappingData),
     updateMapping: (id, mappingData) => api.put(`/featureMappings/${id}`, mappingData),
     deleteMapping: (id) => api.delete(`/featureMappings/${id}`),
+    getByRoleName: (roleName) => api.get(`/feature-mappings/role/` + roleName),
 };
 
 const statisticsService = {
@@ -113,6 +115,7 @@ const techPatientAssignmentService = {
     getAllAssignments: () => api.get("/technicianPatient/assignments"),
     deleteAssignment: (id) => api.delete(`/technicianPatient/assignments/${id}`),
 }
+
 
 export {
     userService,

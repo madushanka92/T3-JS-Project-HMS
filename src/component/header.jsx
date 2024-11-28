@@ -14,15 +14,6 @@ const Header = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <NavDropdown title="Admissions" id="basic-nav-dropdown">
-                <NavDropdown.Item as={NavLink} to="/admissions/create">
-                  New Admission
-                </NavDropdown.Item>
-                <NavDropdown.Item as={NavLink} to="/admissions/list">
-                  Admissions
-                </NavDropdown.Item>
-              </NavDropdown>
-
               {/* Updated Assignments Dropdown with sub-menu items for Doctor, Nurse, and Tech */}
               <NavDropdown title="Assignments" id="basic-nav-dropdown">
                 <NavDropdown.Item as={NavLink} to="/assignments/doctor/create">
@@ -62,6 +53,15 @@ const Header = () => {
                   to="/assignments/tech-patient/list"
                 >
                   Tech - Patient : Assignments
+                </NavDropdown.Item>
+              </NavDropdown>
+
+              <NavDropdown title="Admissions" id="basic-nav-dropdown">
+                <NavDropdown.Item as={NavLink} to="/admissions/create">
+                  New Admission
+                </NavDropdown.Item>
+                <NavDropdown.Item as={NavLink} to="/admissions/list">
+                  Admissions
                 </NavDropdown.Item>
               </NavDropdown>
 
