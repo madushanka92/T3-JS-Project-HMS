@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../assets/css/component/sideMenu.scss";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Nav, Navbar } from "react-bootstrap";
 import {
   FaHome,
@@ -24,8 +24,15 @@ const SideMenu = () => {
   const [openSubMenu, setOpenSubMenu] = useState(null); // State to manage the open submenus
   const [userFeatures, setUserFeatures] = useState([]); // Store user's feature access
 
-  const toggleSubMenu = (menu) => {
-    setOpenSubMenu(openSubMenu === menu ? null : menu); // Toggle the submenu
+  const navigate = useNavigate();
+
+  const toggleSubMenu = (item) => {
+    if (item.subMenu) {
+      const menu = item.name;
+      setOpenSubMenu(openSubMenu === menu ? null : menu);
+    } else {
+      if (item.link) navigate(item.link);
+    }
   };
 
   const user = JSON.parse(localStorage.getItem("user"));
@@ -49,13 +56,17 @@ const SideMenu = () => {
 
   const filterMenuItems = (menu) => {
     return menu.filter((item) => {
+      if (!item.featureAccess) {
+        return true;
+      }
+
       const featureAccess = item.featureAccess || {};
       const hasReadAccess =
-        featureAccess.canRead &&
-        hasAccess(item.featureAccess.canRead, "canRead");
+        featureAccess?.canRead &&
+        hasAccess(item?.featureAccess?.canRead, "canRead");
       const hasCreateAccess =
-        featureAccess.canCreate &&
-        hasAccess(item.featureAccess.canCreate, "canCreate");
+        featureAccess?.canCreate &&
+        hasAccess(item?.featureAccess?.canCreate, "canCreate");
 
       if (!hasReadAccess && !hasCreateAccess) {
         return false; // Hide this item if the user doesn't have necessary access
@@ -88,7 +99,7 @@ const SideMenu = () => {
     {
       name: "Profile",
       icon: <FaUser />,
-      link: `/profile/${userId}`,
+      link: `/profile/`,
       featureAccess: {
         canRead: "UserProfile",
       },
@@ -249,13 +260,13 @@ const SideMenu = () => {
         <div className="text-dark" style={{ width: "250px", height: "100vh" }}>
           <Navbar expand="lg" variant="dark" className="flex-column">
             <div className="navTitle">
-              <Navbar.Brand href="#">HMS</Navbar.Brand>
+              <Navbar.Brand href="/home">HMS</Navbar.Brand>
             </div>
             <Nav className="flex-column" activeKey={activeKey}>
               {filteredMenuItems.map((item, index) => (
                 <Nav.Item key={index}>
                   <Nav.Link
-                    onClick={() => item.subMenu && toggleSubMenu(item.name)}
+                    onClick={() => toggleSubMenu(item)}
                     className={`text-dark ${
                       activeKey === item.link ? "bg-selected" : ""
                     }`}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { admissionService } from "../../_services/apiService";
 import { useNavigate } from "react-router-dom";
+import { getFeaturePermissions } from "../../utils/permissions";
 
 const AdmissionList = () => {
   const [admissions, setAdmissions] = useState([]);
@@ -21,6 +22,12 @@ const AdmissionList = () => {
       }
     };
     fetchAdmissions();
+  }, []);
+
+  const [admissionsPermission, setAdmissionsPermission] = useState(false);
+
+  useEffect(() => {
+    setAdmissionsPermission(getFeaturePermissions("Admissions"));
   }, []);
 
   // Handle delete admission
@@ -76,6 +83,7 @@ const AdmissionList = () => {
                     <button
                       className="btn btn-sm btn-primary me-2"
                       onClick={() => handleEdit(admission._id)}
+                      disabled={!admissionsPermission.canUpdate}
                     >
                       Edit
                     </button>
@@ -83,8 +91,9 @@ const AdmissionList = () => {
                       className="btn btn-danger"
                       onClick={() => handleDelete(admission._id)}
                       disabled={
-                        admission.admissionStatus !== "Active" &&
-                        admission.admissionStatus !== "Pending"
+                        (admission.admissionStatus !== "Active" &&
+                          admission.admissionStatus !== "Pending") ||
+                        !admissionsPermission.canDelete
                       }
                     >
                       Delete

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { patientService } from "../../_services/apiService";
 import { useNavigate } from "react-router-dom";
+import { getFeaturePermissions } from "../../utils/permissions";
 
 const PatientListPage = () => {
   const [patients, setPatients] = useState([]);
@@ -10,6 +11,12 @@ const PatientListPage = () => {
   const [pageSize, setPageSize] = useState(10); //  page size
   const [totalRecords, setTotalRecords] = useState(0); // Total records to get number of pages
   const navigate = useNavigate();
+
+  const [patientPermission, setPatientPermission] = useState(false);
+
+  useEffect(() => {
+    setPatientPermission(getFeaturePermissions("Patients"));
+  }, []);
 
   useEffect(() => {
     patientService
@@ -42,6 +49,15 @@ const PatientListPage = () => {
   return (
     <div className="container">
       <h2 className="text-start">Patient List</h2>
+
+      <button
+        className="btn btn-primary mb-2"
+        onClick={() => navigate("/patients/create")}
+        disabled={!patientPermission.canCreate}
+      >
+        Add Patient
+      </button>
+
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       <div className="form-group mb-3">
@@ -55,13 +71,6 @@ const PatientListPage = () => {
           placeholder="Search by first name, last name, or contact number"
         />
       </div>
-
-      <button
-        className="btn btn-primary"
-        onClick={() => navigate("/patients/create")}
-      >
-        Add Patient
-      </button>
 
       <table className="table table-striped mt-3">
         <thead>
@@ -86,12 +95,14 @@ const PatientListPage = () => {
                 <button
                   className="btn btn-warning mr-3"
                   onClick={() => handleEdit(p._id)}
+                  disabled={!patientPermission.canUpdate}
                 >
                   Edit
                 </button>
                 <button
                   className="btn btn-danger"
                   onClick={() => handleDelete(p._id)}
+                  disabled={!patientPermission.canDelete}
                 >
                   Delete
                 </button>

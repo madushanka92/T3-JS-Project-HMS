@@ -18,6 +18,7 @@ const FeatureMappingPage = () => {
     canDelete: false,
   });
   const [editMapping, setEditMapping] = useState(null); // Track the mapping being edited
+  const [hideAdmin, setHideAdmin] = useState(false); // State to track hiding Admin rows
 
   useEffect(() => {
     const fetchFeatureMappings = async () => {
@@ -106,10 +107,19 @@ const FeatureMappingPage = () => {
     });
   };
 
+  const toggleHideAdmin = () => {
+    setHideAdmin(!hideAdmin); // Toggle the visibility of Admin rows
+  };
+
+  // Filter featureMappings to hide admin rows if hideAdmin is true
+  const filteredMappings = hideAdmin
+    ? featureMappings.filter((mapping) => mapping.roleId?.roleName !== "Admin")
+    : featureMappings;
+
   return (
     <div className="container mt-4">
       <h1>Manage Feature Mappings</h1>
-      <div className="mb-4">
+      <div className="mb-3">
         <h2>
           {editMapping ? "Edit Feature Mapping" : "Add New Feature Mapping"}
         </h2>
@@ -200,6 +210,10 @@ const FeatureMappingPage = () => {
         <button className="btn btn-primary mt-3" onClick={handleAddMapping}>
           {editMapping ? "Update Mapping" : "Add Mapping"}
         </button>
+
+        <button className="btn btn-secondary mt-3 ml-4" onClick={toggleHideAdmin}>
+          {hideAdmin ? "Unhide Admin" : "Hide Admin"}
+        </button>
       </div>
 
       <h3>Feature Mappings</h3>
@@ -216,7 +230,7 @@ const FeatureMappingPage = () => {
           </tr>
         </thead>
         <tbody>
-          {featureMappings.map((mapping) => (
+          {filteredMappings.map((mapping) => (
             <tr key={mapping._id}>
               <td>{mapping.roleId?.roleName}</td>
               <td>{mapping.featureId?.featureName}</td>

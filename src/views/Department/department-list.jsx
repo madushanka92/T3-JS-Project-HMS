@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { departmentService } from "../../_services/apiService";
 import { useNavigate } from "react-router-dom";
+import { getFeaturePermissions } from "../../utils/permissions";
 
 const DepartmentList = () => {
   const [departments, setDepartments] = useState([]);
   const navigate = useNavigate();
+
+  const [deptPermission, setDeptPermission] = useState(false);
+
+  useEffect(() => {
+    setDeptPermission(getFeaturePermissions("Departments"));
+  }, []);
 
   useEffect(() => {
     departmentService
@@ -34,6 +41,7 @@ const DepartmentList = () => {
       <button
         onClick={() => navigate("/departments/create")}
         className="btn btn-primary add-new"
+        disabled={!deptPermission.canCreate}
       >
         Create New Department
       </button>
@@ -60,12 +68,14 @@ const DepartmentList = () => {
                 <button
                   onClick={() => handleEdit(d._id)}
                   className="btn btn-warning"
+                  disabled={!deptPermission.canUpdate}
                 >
                   Edit
                 </button>
                 <button
                   onClick={() => handleDelete(d._id)}
                   className="btn btn-danger"
+                  disabled={!deptPermission.canDelete}
                 >
                   Delete
                 </button>

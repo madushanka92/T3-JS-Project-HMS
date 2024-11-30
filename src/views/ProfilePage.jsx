@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom"; // For accessing the user ID from the route
 import { userService } from "../_services/apiService"; // Import the userService
 import { getFeatureAccess } from "../_services/helpers"; // Assuming you have this helper function for checking access
+import { getFeaturePermissions } from "../utils/permissions";
 
 const UserProfile = () => {
   const { id } = useParams(); // Get the user ID from the route
@@ -15,6 +16,12 @@ const UserProfile = () => {
     address: "",
     password: "", // Add password to the form data
   });
+
+  const [ userPermission, setUserPermission] = useState(false);
+
+  useEffect(() => {
+    setUserPermission(getFeaturePermissions("UserProfile"));
+  }, []);
 
   // Get the access for the 'UserProfile' feature (canUpdate)
   const access = getFeatureAccess("UserProfile");
@@ -74,6 +81,7 @@ const UserProfile = () => {
             <button
               className="btn btn-primary"
               onClick={() => setEditMode(true)}
+              disabled={!userPermission.canUpdate}
             >
               Edit Profile
             </button>

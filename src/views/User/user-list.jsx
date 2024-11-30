@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { userService } from "../../_services/apiService";
 import { useNavigate } from "react-router-dom";
+import { getFeaturePermissions } from "../../utils/permissions";
 
 const UserListPage = () => {
   const [users, setUsers] = useState([]);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const [userCreate, setUserCreate] = useState(false);
+
+  useEffect(() => {
+    setUserCreate(getFeaturePermissions("Users"));
+  }, []);
 
   // Fetch users on component mount
   useEffect(() => {
@@ -75,12 +81,14 @@ const UserListPage = () => {
                 <button
                   className="btn btn-warning"
                   onClick={() => handleEdit(user._id)}
+                  disabled={!userCreate.canUpdate}
                 >
                   Edit
                 </button>
                 <button
                   className="btn btn-danger"
                   onClick={() => handleDelete(user._id)}
+                  disabled={!userCreate.canDelete}
                 >
                   Delete
                 </button>

@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { roomService } from "../../_services/apiService";
 import { useNavigate } from "react-router-dom";
+import { getFeaturePermissions } from "../../utils/permissions";
 
 const RoomList = () => {
   const [rooms, setRooms] = useState([]);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  const [roomsPermission, setRoomsPermission] = useState(false);
+
+  useEffect(() => {
+    setRoomsPermission(getFeaturePermissions("Rooms"));
+  }, []);
 
   useEffect(() => {
     roomService
@@ -30,6 +37,7 @@ const RoomList = () => {
       <button
         className="btn btn-primary mb-3"
         onClick={() => navigate("/rooms/create")}
+        disabled={!roomsPermission.canCreate}
       >
         Add Room
       </button>
@@ -56,12 +64,14 @@ const RoomList = () => {
                 <button
                   className="btn btn-warning mr-2"
                   onClick={() => navigate(`/rooms/edit/${room._id}`)}
+                  disabled={!roomsPermission.canUpdate}
                 >
                   Edit
                 </button>
                 <button
                   className="btn btn-danger"
                   onClick={() => handleDelete(room._id)}
+                  disabled={!roomsPermission.canDelete}
                 >
                   Delete
                 </button>

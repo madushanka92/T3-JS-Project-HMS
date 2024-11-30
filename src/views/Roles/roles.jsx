@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { roleService } from "../../_services/apiService";
 import { useNavigate } from "react-router-dom";
+import { getFeaturePermissions } from "../../utils/permissions";
 
 const RolesPage = () => {
   const [roles, setRoles] = useState([]);
@@ -9,6 +10,12 @@ const RolesPage = () => {
   const [mode, setMode] = useState("create");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  const [rolesPermission, setRolesPermission] = useState(false);
+
+  useEffect(() => {
+    setRolesPermission(getFeaturePermissions("Roles"));
+  }, []);
 
   // all roles
   useEffect(() => {
@@ -101,7 +108,11 @@ const RolesPage = () => {
           onChange={(e) => setRoleName(e.target.value)}
           placeholder="Enter role name"
         />
-        <button className="btn btn-primary mt-2" onClick={handleSaveRole}>
+        <button
+          className="btn btn-primary mt-2"
+          onClick={handleSaveRole}
+          disabled={!rolesPermission.canCreate}
+        >
           {mode === "create" ? "Add Role" : "Update Role"}
         </button>
         {mode === "edit" && (
@@ -129,12 +140,14 @@ const RolesPage = () => {
                 <button
                   className="btn btn-warning mr-3"
                   onClick={() => handleEditRole(role)}
+                  disabled={!rolesPermission.canUpdate}
                 >
                   Edit
                 </button>
                 <button
                   className="btn btn-danger"
                   onClick={() => handleDeleteRole(role._id)}
+                  disabled={!rolesPermission.canDelete}
                 >
                   Delete
                 </button>
