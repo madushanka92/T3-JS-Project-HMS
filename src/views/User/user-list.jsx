@@ -5,6 +5,8 @@ import { getFeaturePermissions } from "../../utils/permissions";
 
 const UserListPage = () => {
   const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]); // State for filtered users
+  const [searchTerm, setSearchTerm] = useState(""); // State for the search input
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const [userCreate, setUserCreate] = useState(false);
@@ -19,12 +21,29 @@ const UserListPage = () => {
       .getAllUsers()
       .then((response) => {
         setUsers(response.data);
+        setFilteredUsers(response.data); // Initialize filteredUsers with all users
       })
       .catch((err) => {
         console.error("Error fetching users:", err);
         setError("Failed to load users.");
       });
   }, []);
+
+  // Handle search input change
+  const handleSearch = (e) => {
+    const term = e.target.value.toLowerCase();
+    setSearchTerm(term);
+
+    // Filter users based on the search term
+    const filtered = users.filter(
+      (user) =>
+        user.firstName.toLowerCase().includes(term) ||
+        user.lastName.toLowerCase().includes(term) ||
+        user.email.toLowerCase().includes(term) ||
+        (user.departmentId?.departmentName || "").toLowerCase().includes(term)
+    );
+    setFilteredUsers(filtered);
+  };
 
   const handleEdit = (userId) => {
     navigate(`/users/edit/${userId}`);
@@ -42,6 +61,9 @@ const UserListPage = () => {
           setUsers((prevUsers) =>
             prevUsers.filter((user) => user._id !== userId)
           );
+          setFilteredUsers((prevUsers) =>
+            prevUsers.filter((user) => user._id !== userId)
+          );
         })
         .catch((err) => {
           console.error("Error deleting user:", err);
@@ -56,6 +78,17 @@ const UserListPage = () => {
 
       {error && <p style={{ color: "red" }}>{error}</p>}
 
+      {/* Search Field */}
+      <div className="mb-3">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Search by name, email, or department"
+          value={searchTerm}
+          onChange={handleSearch}
+        />
+      </div>
+
       <table className="table table-striped">
         <thead>
           <tr>
@@ -69,7 +102,7 @@ const UserListPage = () => {
           </tr>
         </thead>
         <tbody>
-          {users?.map((user) => (
+          {filteredUsers?.map((user) => (
             <tr key={user._id}>
               <td>{user.firstName}</td>
               <td>{user.lastName}</td>

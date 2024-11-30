@@ -15,6 +15,7 @@ const UserProfile = () => {
     contactNumber: "",
     address: "",
     password: "", // Add password to the form data
+    confirmPassword: "", // Add confirm password to the form data
   });
 
   const [ userPermission, setUserPermission] = useState(false);
@@ -38,6 +39,7 @@ const UserProfile = () => {
           contactNumber: response.data.contactNumber || "",
           address: response.data.address || "",
           password: "", // Initialize password as empty
+          confirmPassword: "", // Initialize confirm password as empty
         });
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -53,6 +55,12 @@ const UserProfile = () => {
   };
 
   const handleSaveChanges = async () => {
+    // Validate passwords
+    if (formData.password && formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
     try {
       // Only include the password if it's been changed
       const updatedData = {
@@ -143,18 +151,30 @@ const UserProfile = () => {
             ></textarea>
           </div>
 
-          {/* Password field visible only when in edit mode */}
+          {/* Password fields visible only when in edit mode */}
           {editMode && (
-            <div className="mb-3">
-              <label>New Password</label>
-              <input
-                type="password"
-                name="password"
-                className="form-control"
-                value={formData.password}
-                onChange={handleInputChange}
-              />
-            </div>
+            <>
+              <div className="mb-3">
+                <label>New Password</label>
+                <input
+                  type="password"
+                  name="password"
+                  className="form-control"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="mb-3">
+                <label>Confirm Password</label>
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  className="form-control"
+                  value={formData.confirmPassword}
+                  onChange={handleInputChange}
+                />
+              </div>
+            </>
           )}
 
           {editMode && (
