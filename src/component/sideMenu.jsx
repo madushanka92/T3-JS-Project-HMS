@@ -12,6 +12,8 @@ import {
   FaPeopleArrows,
   FaHospital,
 } from "react-icons/fa"; // Using react-icons for icons
+import { FaCircleDollarToSlot } from "react-icons/fa6";
+
 
 const SideMenu = () => {
   const location = useLocation(); // Get current route using useLocation
@@ -248,6 +250,30 @@ const SideMenu = () => {
             canRead: "Features",
           },
         },
+      ],
+    },
+    {
+      name: "Billing",
+      icon: <FaCircleDollarToSlot />,
+      link: "/billing",
+      featureAccess: {
+        canRead: "Billing",
+      },
+      subMenu: [
+        {
+          name: "Billing List",
+          link: "/billing/list",
+          featureAccess: {
+            canRead: "Billing",
+          },
+        },
+        // {
+        //   name: "Feature Mapping",
+        //   link: "/featureMapping/list",
+        //   featureAccess: {
+        //     canRead: "Features",
+        //   },
+        // },
       ],
     },
   ];

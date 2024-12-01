@@ -41,6 +41,12 @@ import TechDeptAssignmentsList from "../views/Assignment/Technician/Department/a
 import CreateTechPatientAssignment from "../views/Assignment/Technician/Patient/assignment-create";
 import TechPatientAssignmentsList from "../views/Assignment/Technician/Patient/assignment-list";
 
+// Billings
+import BillingPage from "../views/Billing/billing";
+
+// Appointment
+import AppointmentPage from "../views/Appointment/appointments";
+
 const routes = [
   { path: "/home", element: <HomePage /> },
   { path: "/profile/:id", element: <ProfilePage /> },
@@ -102,7 +108,15 @@ const routes = [
     element: <TechPatientAssignmentsList />,
   },
 
-  ,
+  {
+    path: "/billing/list",
+    element: <BillingPage />,
+  },
+
+  {
+    path: "/appointments",
+    element: <AppointmentPage />,
+  },
 ];
 
 export default routes;

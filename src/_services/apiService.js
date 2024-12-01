@@ -116,6 +116,39 @@ const techPatientAssignmentService = {
     deleteAssignment: (id) => api.delete(`/technicianPatient/assignments/${id}`),
 }
 
+const appointmentService = {
+    createAppointment: (appointment) => api.post("/appointments", appointment),
+    getAllAppointments: () => api.get('/appointments'),
+    getAppointmentById: (id) => api.get(`/appointments/${id}`),
+    updateAppointment: (id, appointment) => api.put(`/appointments/${id}`, appointment),
+    deleteAppointment: (id) => api.delete(`/appointments/${id}`),
+    updateAppointmentStatus: (id, appointment) => api.put(`/appointments/${id}/status`, appointment),
+    getAppointmentsByPatientId: (patiendId) => api.get(`/appointments/patient/${patiendId}`),
+    getScheduledAppointmentsByPatient: (patiendId) => api.get(`/appointments/scheduled/${patiendId}`),
+}
+
+// Billing Services
+const billingService = {
+    createBilling: (billData) => api.post("/billings", billData),
+    getAllBillings: () => api.get('/billings'),
+    getBillingById: (id) => api.get(`/billings/${id}`),
+    updateBilling: (id, billData) => api.put(`/billings/${id}`, billData),
+    deleteBilling: (id) => api.delete(`/billings/${id}`),
+}
+
+
+// Payments
+const paymentService = {
+    createPayment: (payment) => api.post("/payments", payment),
+    getAllPayments: () => api.get('/payments'),
+    getPaymentById: (id) => api.get(`/payments/${id}`),
+    getPaymentsByBillId: (billId) => api.get(`/payments/bill/${billId}`),
+    getPaymentsByPatientId: (patientId) => api.get(`/payments/patient/${patientId}`),
+    updatePaymentStatus: (id, payment) => api.put(`/payments/${id}/status`, payment),
+    deletePayment: (id) => api.delete(`/payments/${id}`),
+    getPaymentsByStatus: (status) => api.get(`/payments/status/${status}`),
+}
+
 
 export {
     userService,
@@ -126,6 +159,6 @@ export {
     admissionService,
     featureService,
     featureMappingService,
-    statisticsService,
-    doctorAssignmentService, nurseAssignmentService, techDepartmentAssignmentService, techPatientAssignmentService
+    statisticsService, billingService, appointmentService,
+    doctorAssignmentService, nurseAssignmentService, techDepartmentAssignmentService, techPatientAssignmentService, paymentService
 };

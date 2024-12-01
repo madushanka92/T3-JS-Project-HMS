@@ -41,7 +41,6 @@ const LoginPage = () => {
           });
       })
       .catch((err) => {
-        console.log("Err : ", err);
         setError(err.response?.data?.message || "An error occurred");
       });
   };

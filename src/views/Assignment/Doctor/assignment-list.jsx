@@ -14,7 +14,6 @@ const AssignmentsList = () => {
     doctorAssignmentService
       .getAllAssignments() // Assuming this API call fetches all doctor-patient assignments
       .then((response) => {
-        console.log("A : ", response);
         setAssignments(response.data); // Store fetched assignments
         setLoading(false);
       })

@@ -30,6 +30,11 @@ const Header = () => {
 
   const headerMenuItems = [
     {
+      title: "Appointments",
+      link: "/appointments",
+      featureAccess: { canCreate: "Features" },
+    },
+    {
       title: "Assignments",
       subMenu: [
         {
@@ -102,7 +107,13 @@ const Header = () => {
               subItem.featureAccess?.canRead ? "canRead" : "canCreate"
             )
           );
-        }
+        } else if (item.link)
+          return hasAccess(
+            item.featureAccess?.canRead || item.featureAccess?.canCreate,
+            item.featureAccess?.canRead ? "canRead" : "canCreate"
+          )
+            ? item
+            : null;
         return item.subMenu?.length ? item : null;
       })
       .filter(Boolean);
@@ -116,24 +127,35 @@ const Header = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              {filteredHeaderMenuItems.map((menu, index) => (
-                <NavDropdown
-                  title={menu.title}
-                  key={index}
-                  id={`dropdown-${index}`}
-                >
-                  {menu.subMenu.map((subItem, subIndex) => (
-                    <NavDropdown.Item
-                      as={NavLink}
-                      to={subItem.link}
-                      key={subIndex}
-                      className={activeKey === subItem.link ? "active" : ""}
-                    >
-                      {subItem.name}
-                    </NavDropdown.Item>
-                  ))}
-                </NavDropdown>
-              ))}
+              {filteredHeaderMenuItems.map((menu, index) =>
+                menu.subMenu ? (
+                  <NavDropdown
+                    title={menu.title}
+                    key={index}
+                    id={`dropdown-${index}`}
+                  >
+                    {menu.subMenu?.map((subItem, subIndex) => (
+                      <NavDropdown.Item
+                        as={NavLink}
+                        to={subItem.link}
+                        key={subIndex}
+                        className={activeKey === subItem.link ? "active" : ""}
+                      >
+                        {subItem.name}
+                      </NavDropdown.Item>
+                    ))}
+                  </NavDropdown>
+                ) : (
+                  <Nav.Link
+                    as={NavLink}
+                    to={menu.link}
+                    className={activeKey === menu.link ? "active" : ""}
+                    key={index}
+                  >
+                    {menu.title}
+                  </Nav.Link>
+                )
+              )}
               <Nav.Link
                 as={NavLink}
                 to="/"
