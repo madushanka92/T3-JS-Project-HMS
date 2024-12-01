@@ -3,10 +3,17 @@ import { Box, Typography, Button, Divider } from "@mui/material";
 import PaymentHistory from "../payment/payment-history";
 import PaymentForm from "../payment/create-payment";
 import { billingService } from "../../_services/apiService";
+import { getFeaturePermissions } from "../../utils/permissions";
 
 const BillingDetails = ({ bill, refreshBillList }) => {
   const [currentBill, setCurrentBill] = useState(bill); // Local state for bill
   const [refreshFlag, setRefreshFlag] = useState(false); // Flag to trigger payment history refresh
+
+  const [paymentPermission, setPaymentPermission] = useState(false);
+
+  useEffect(() => {
+    setPaymentPermission(getFeaturePermissions("Payments"));
+  }, []);
 
   useEffect(() => {
     if (bill) {
@@ -56,14 +63,17 @@ const BillingDetails = ({ bill, refreshBillList }) => {
 
       <Divider sx={{ my: 2 }} />
 
-      <Typography variant="h5" gutterBottom>
-        Payment History
-      </Typography>
-      <PaymentHistory billId={currentBill.id} refreshFlag={refreshFlag} />
+      {paymentPermission.canRead && (
+        <>
+          <Typography variant="h5" gutterBottom>
+            Payment History
+          </Typography>
+          <PaymentHistory billId={currentBill.id} refreshFlag={refreshFlag} />
+          <Divider sx={{ my: 2 }} />
+        </>
+      )}
 
-      <Divider sx={{ my: 2 }} />
-
-      {currentBill.paymentStatus !== "Paid" && (
+      {currentBill.paymentStatus !== "Paid" && paymentPermission.canCreate && (
         <>
           <Typography variant="h5" gutterBottom>
             Add Payment

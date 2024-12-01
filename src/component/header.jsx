@@ -32,7 +32,7 @@ const Header = () => {
     {
       title: "Appointments",
       link: "/appointments",
-      featureAccess: { canCreate: "Features" },
+      featureAccess: { canCreate: "Appointments" },
     },
     {
       title: "Assignments",

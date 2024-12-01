@@ -2,10 +2,18 @@ import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Button, Box, Typography } from "@mui/material";
 import { billingService } from "../../_services/apiService";
+import { getFeaturePermissions } from "../../utils/permissions";
 
 const BillingList = ({ refreshFlag, onSelectBill }) => {
   const [bills, setBills] = useState([]);
   const [loading, setLoading] = useState(true);
+
+
+  const [billPermission, setBillPermission ] = useState(false);
+
+  useEffect(() => {
+    setBillPermission(getFeaturePermissions("Billing"));
+  }, []);
 
   useEffect(() => {
     const fetchBills = async () => {
@@ -51,6 +59,7 @@ const BillingList = ({ refreshFlag, onSelectBill }) => {
             variant="contained"
             size="small"
             onClick={() => onSelectBill(params)}
+            disabled={!billPermission.canRead}
           >
             Details
           </Button>

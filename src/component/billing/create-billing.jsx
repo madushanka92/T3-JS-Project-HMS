@@ -13,6 +13,7 @@ import {
   patientService,
 } from "../../_services/apiService";
 import { formatDate, formatTime } from "../../_services/helpers";
+import { getFeaturePermissions } from "../../utils/permissions";
 
 const BillingForm = ({ onBillCreated }) => {
   const [patients, setPatients] = useState([]); // List of patients based on search
@@ -25,6 +26,12 @@ const BillingForm = ({ onBillCreated }) => {
     appointmentId: "",
     totalAmount: "",
   });
+
+  const [billPermission, setBillPermission ] = useState(false);
+
+  useEffect(() => {
+    setBillPermission(getFeaturePermissions("Billing"));
+  }, []);
 
   // Fetch patients on search query change
   useEffect(() => {
@@ -159,7 +166,12 @@ const BillingForm = ({ onBillCreated }) => {
         onChange={handleChange}
       />
 
-      <Button type="submit" variant="contained" color="primary">
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        disabled={!billPermission.canCreate}
+      >
         Create Bill
       </Button>
     </Box>
