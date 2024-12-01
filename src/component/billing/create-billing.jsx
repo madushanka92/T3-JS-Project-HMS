@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from "react";
 import {
   Box,
+  Typography,
   TextField,
   Button,
   MenuItem,
-  Typography,
+  FormControl,
+  InputLabel,
+  Select,
   CircularProgress,
+  Grid,
+  Card,
+  CardContent,
+  Divider,
+  Alert,
 } from "@mui/material";
 import {
   appointmentService,
@@ -26,8 +34,8 @@ const BillingForm = ({ onBillCreated }) => {
     appointmentId: "",
     totalAmount: "",
   });
-
-  const [billPermission, setBillPermission ] = useState(false);
+  const [error, setError] = useState(null);
+  const [billPermission, setBillPermission] = useState(false);
 
   useEffect(() => {
     setBillPermission(getFeaturePermissions("Billing"));
@@ -49,7 +57,7 @@ const BillingForm = ({ onBillCreated }) => {
         );
         setPatients(response.data.patients);
       } catch (error) {
-        console.error("Error fetching patients:", error);
+        setError("Failed to fetch patients.");
       } finally {
         setLoadingPatients(false);
       }
@@ -73,12 +81,21 @@ const BillingForm = ({ onBillCreated }) => {
         await appointmentService.getScheduledAppointmentsByPatient(patient._id);
       setAppointments(appointmentResponse.data);
     } catch (error) {
-      if (error) setAppointments([]);
+      setAppointments([]);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (
+      !formData.patientId ||
+      !formData.appointmentId ||
+      !formData.totalAmount
+    ) {
+      setError("Please fill in all the required fields.");
+      return;
+    }
+
     try {
       const response = await billingService.createBilling(formData); // Create bill
       setFormData({
@@ -87,93 +104,115 @@ const BillingForm = ({ onBillCreated }) => {
         totalAmount: "",
       });
       onBillCreated(response.data); // Callback to refresh the billing list
+      setError(null);
     } catch (error) {
-      console.error("Error creating bill:", error);
+      setError("Failed to create bill.");
     }
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit}>
-      <Typography variant="h5" gutterBottom>
+    <Box sx={{ maxWidth: 900, margin: "0 auto", padding: 2 }}>
+      <Typography variant="h4" gutterBottom>
         Create New Bill
       </Typography>
 
-      {/* Patient Search Box */}
-      <TextField
-        label="Search Patient"
-        name="patientId"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)} // Update search query
-        fullWidth
-        margin="normal"
-      />
-
-      {/* Display search results */}
-      {patients.length > 0 && (
-        <div>
-          {patients.map((patient) => (
-            <MenuItem
-              key={patient._id}
-              onClick={() => handlePatientSelect(patient)}
-              style={{ cursor: "pointer" }}
-            >
-              {patient.firstName} {patient.lastName}
-            </MenuItem>
-          ))}
-        </div>
+      {error && (
+        <Alert severity="error" sx={{ marginBottom: 2 }}>
+          {error}
+        </Alert>
       )}
 
-      {/* Loading state */}
-      {loadingPatients && <CircularProgress size={24} />}
+      <Card variant="outlined">
+        <CardContent>
+          <form onSubmit={handleSubmit}>
+            <Grid container spacing={2}>
+              {/* Patient Search */}
+              <Grid item xs={12} md={6}>
+                <TextField
+                  label="Search Patient"
+                  fullWidth
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search by Name or ID"
+                  variant="outlined"
+                />
+                {patients.length > 0 && (
+                  <Box sx={{ maxHeight: 200, overflowY: "auto", marginTop: 1 }}>
+                    {patients.map((patient) => (
+                      <Box
+                        key={patient._id}
+                        sx={{
+                          padding: 1,
+                          cursor: "pointer",
+                          "&:hover": { backgroundColor: "#f0f0f0" },
+                        }}
+                        onClick={() => handlePatientSelect(patient)}
+                      >
+                        {patient.firstName} {patient.lastName}
+                      </Box>
+                    ))}
+                  </Box>
+                )}
+                {loadingPatients && <CircularProgress size={24} />}
+                {selectedPatient && (
+                  <Typography sx={{ marginTop: 1 }}>
+                    Selected Patient: {selectedPatient.firstName}{" "}
+                    {selectedPatient.lastName}
+                  </Typography>
+                )}
+              </Grid>
 
-      {/* Selected Patient */}
-      {formData.patientId && (
-        <Typography variant="body1" color="textSecondary" marginTop={2}>
-          Selected Patient: {selectedPatient.firstName}{" "}
-          {selectedPatient.lastName}
-        </Typography>
-      )}
+              {/* Appointment Select */}
+              <Grid item xs={12} md={6}>
+                <FormControl fullWidth>
+                  <InputLabel>Select Appointment</InputLabel>
+                  <Select
+                    value={formData.appointmentId}
+                    onChange={handleChange}
+                    label="Select Appointment"
+                    name="appointmentId"
+                  >
+                    {appointments.map((appointment) => (
+                      <MenuItem key={appointment._id} value={appointment._id}>
+                        {formatDate(appointment.appointmentDate)} -{" "}
+                        {formatTime(appointment.appointmentTime)} (Dr.{" "}
+                        {appointment.doctorId?.firstName}{" "}
+                        {appointment.doctorId?.lastName})
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
 
-      {/* Appointment Selection */}
-      <TextField
-        label="Select Appointment"
-        name="appointmentId"
-        select
-        fullWidth
-        margin="normal"
-        required
-        value={formData.appointmentId}
-        onChange={handleChange}
-      >
-        {appointments.map((appointment) => (
-          <MenuItem key={appointment._id} value={appointment._id}>
-            {formatDate(appointment.appointmentDate)} -{" "}
-            {formatTime(appointment.appointmentTime)} (Dr.{" "}
-            {appointment.doctorId?.firstName} {appointment.doctorId?.lastName})
-          </MenuItem>
-        ))}
-      </TextField>
+              {/* Total Amount */}
+              <Grid item xs={12} md={6}>
+                <TextField
+                  label="Total Amount"
+                  name="totalAmount"
+                  type="number"
+                  fullWidth
+                  required
+                  value={formData.totalAmount}
+                  onChange={handleChange}
+                  variant="outlined"
+                />
+              </Grid>
 
-      {/* Total Amount */}
-      <TextField
-        label="Total Amount"
-        name="totalAmount"
-        type="number"
-        fullWidth
-        margin="normal"
-        required
-        value={formData.totalAmount}
-        onChange={handleChange}
-      />
-
-      <Button
-        type="submit"
-        variant="contained"
-        color="primary"
-        disabled={!billPermission.canCreate}
-      >
-        Create Bill
-      </Button>
+              <Grid item xs={12}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  disabled={!billPermission.canCreate}
+                >
+                  Create Bill
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
+        </CardContent>
+      </Card>
     </Box>
   );
 };

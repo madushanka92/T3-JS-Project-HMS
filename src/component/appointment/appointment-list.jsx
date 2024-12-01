@@ -8,6 +8,7 @@ import {
   TableHead,
   TableRow,
   Button,
+  Paper,
 } from "@mui/material";
 import { appointmentService } from "../../_services/apiService";
 
@@ -43,7 +44,13 @@ const AppointmentList = ({ refreshFlag, onSelectAppointment }) => {
 
   return (
     <Box>
-      <TableContainer>
+      <TableContainer
+        component={Paper}
+        sx={{
+          maxHeight: 450, // Set the maximum height of the table container
+          overflowY: "auto", // Enable vertical scrolling if content exceeds maxHeight
+        }}
+      >
         <Table>
           <TableHead>
             <TableRow>
@@ -75,17 +82,22 @@ const AppointmentList = ({ refreshFlag, onSelectAppointment }) => {
                   >
                     View
                   </Button>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => handleDeleteAppointment(appointment._id)}
-                    disabled={
-                      appointment.status === "Canceled" ||
-                      appointment.status === "Completed"
-                    }
-                  >
-                    Delete
-                  </Button>
+
+                  {appointment.status === "Scheduled" && (
+                    <>
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => handleDeleteAppointment(appointment._id)}
+                        disabled={
+                          appointment.status === "Canceled" ||
+                          appointment.status === "Completed"
+                        }
+                      >
+                        Delete
+                      </Button>
+                    </>
+                  )}
                 </TableCell>
               </TableRow>
             ))}

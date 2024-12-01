@@ -1,6 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  CircularProgress,
+  Grid,
+  Card,
+  CardContent,
+  Divider,
+  Alert,
+} from "@mui/material";
+import {
   patientService,
   departmentService,
   userService,
@@ -8,43 +24,35 @@ import {
 } from "../../_services/apiService";
 
 const CreateAppointment = ({ onAppointmentCreated }) => {
-  const [patients, setPatients] = useState([]); // Store all patients from search
-  const [doctors, setDoctors] = useState([]); // Store all doctors for selection
-  const [departments, setDepartments] = useState([]); // Store departments for selection
-  const [selectedPatient, setSelectedPatient] = useState(null); // Store selected patient
-  const [selectedDoctor, setSelectedDoctor] = useState(null); // Store selected doctor
-  const [selectedDepartment, setSelectedDepartment] = useState(""); // Store selected department
-  const [appointmentDate, setAppointmentDate] = useState(""); // Store appointment date
-  const [appointmentTime, setAppointmentTime] = useState(""); // Store appointment time
-  const [appointmentType, setAppointmentType] = useState(""); // Store appointment type
-  const [searchQuery, setSearchQuery] = useState(""); // Store search input for patients
-  const [loadingPatients, setLoadingPatients] = useState(false); // Track loading state for patient search
-  const [error, setError] = useState(null); // Track error messages
+  const [patients, setPatients] = useState([]);
+  const [doctors, setDoctors] = useState([]);
+  const [departments, setDepartments] = useState([]);
+  const [selectedPatient, setSelectedPatient] = useState(null);
+  const [selectedDoctor, setSelectedDoctor] = useState(null);
+  const [selectedDepartment, setSelectedDepartment] = useState("");
+  const [appointmentDate, setAppointmentDate] = useState("");
+  const [appointmentTime, setAppointmentTime] = useState("");
+  const [appointmentType, setAppointmentType] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [loadingPatients, setLoadingPatients] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // Fetch all doctors and departments on component load
   useEffect(() => {
-    // Fetch departments
     departmentService
       .getAllDepartments()
-      .then((response) => {
-        setDepartments(response.data);
-      })
+      .then((response) => setDepartments(response.data))
       .catch((err) => setError("Failed to load departments"));
 
-    // Fetch doctors
     userService
       .getAllUsers("Doctor")
-      .then((response) => {
-        setDoctors(response.data);
-      })
+      .then((response) => setDoctors(response.data))
       .catch((err) => setError("Failed to load doctors"));
   }, []);
 
-  // Handle patient search
   useEffect(() => {
     if (searchQuery.trim() === "") {
-      setPatients([]); // Clear the list when the search query is empty
+      setPatients([]);
       return;
     }
 
@@ -52,7 +60,7 @@ const CreateAppointment = ({ onAppointmentCreated }) => {
     patientService
       .getAllPatients(1, 10, searchQuery)
       .then((response) => {
-        setPatients(response.data.patients); // Set patients based on the search results
+        setPatients(response.data.patients);
         setLoadingPatients(false);
       })
       .catch((err) => {
@@ -61,14 +69,12 @@ const CreateAppointment = ({ onAppointmentCreated }) => {
       });
   }, [searchQuery]);
 
-  // Handle patient selection from the search results
   const handlePatientSelect = (patient) => {
     setSelectedPatient(patient);
-    setSearchQuery(""); // Clear search query after selection
-    setPatients([]); // Clear patient list
+    setSearchQuery("");
+    setPatients([]);
   };
 
-  // Handle form submission
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -91,7 +97,7 @@ const CreateAppointment = ({ onAppointmentCreated }) => {
       appointmentDate,
       appointmentTime,
       status: "Scheduled",
-      type: appointmentType, // Added the type value
+      type: appointmentType,
     };
 
     appointmentService
@@ -102,25 +108,21 @@ const CreateAppointment = ({ onAppointmentCreated }) => {
         setSelectedDepartment("");
         setAppointmentDate("");
         setAppointmentTime("");
-        setAppointmentType(""); // Reset the type field
-        setError(null); // Clear error
+        setAppointmentType("");
+        setError(null);
         onAppointmentCreated(data.data);
-        navigate("/appointments"); // Redirect after success
+        navigate("/appointments");
       })
       .catch((err) => setError("Failed to create appointment."));
   };
 
-  // Get today's date in the required YYYY-MM-DD format
   const today = new Date().toISOString().split("T")[0];
 
   useEffect(() => {
-    // Get current time in HH:MM format
     const now = new Date();
     const hours = String(now.getHours()).padStart(2, "0");
     const minutes = String(now.getMinutes()).padStart(2, "0");
     const currentTime = `${hours}:${minutes}`;
-
-    // Set the min attribute for the input to the current time
     const timeInput = document.getElementById("appointmentTime");
     if (timeInput) {
       timeInput.setAttribute("min", currentTime);
@@ -128,140 +130,152 @@ const CreateAppointment = ({ onAppointmentCreated }) => {
   }, []);
 
   return (
-    <div className="container">
-      <h2>Create Appointment</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+    <Box sx={{ maxWidth: 900, margin: "0 auto", padding: 2 }}>
+      <Typography variant="h4" gutterBottom>
+        Create Appointment
+      </Typography>
+      {error && (
+        <Alert severity="error" sx={{ marginBottom: 2 }}>
+          {error}
+        </Alert>
+      )}
 
-      <form onSubmit={handleSubmit}>
-        <div className="form-row">
-          {/* Patient Search Box */}
-          <div className="form-group col-md-6">
-            <label htmlFor="patientSearch">Search Patient</label>
-            <input
-              type="text"
-              id="patientSearch"
-              className="form-control"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)} // Update search query on change
-              placeholder="Search patient by name or ID"
-            />
+      <Card variant="outlined">
+        <CardContent>
+          <form onSubmit={handleSubmit}>
+            <Grid container spacing={2}>
+              {/* Patient Search */}
+              <Grid item xs={12} md={6}>
+                <TextField
+                  label="Search Patient"
+                  fullWidth
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search by Name or ID"
+                  variant="outlined"
+                />
+                {patients.length > 0 && (
+                  <Box sx={{ maxHeight: 200, overflowY: "auto", marginTop: 1 }}>
+                    {patients.map((patient) => (
+                      <Box
+                        key={patient._id}
+                        sx={{
+                          padding: 1,
+                          cursor: "pointer",
+                          "&:hover": { backgroundColor: "#f0f0f0" },
+                        }}
+                        onClick={() => handlePatientSelect(patient)}
+                      >
+                        {patient.firstName} {patient.lastName}
+                      </Box>
+                    ))}
+                  </Box>
+                )}
+                {loadingPatients && <CircularProgress size={24} />}
+                {selectedPatient && (
+                  <Typography sx={{ marginTop: 1 }}>
+                    {selectedPatient.firstName} {selectedPatient.lastName}
+                  </Typography>
+                )}
+              </Grid>
 
-            {/* Display search results */}
-            {patients.length > 0 && (
-              <ul className="list-group mt-2">
-                {patients.map((patient) => (
-                  <li
-                    key={patient._id}
-                    className="list-group-item"
-                    style={{ cursor: "pointer" }}
-                    onClick={() => handlePatientSelect(patient)} // Select patient on click
+              {/* Doctor Select */}
+              <Grid item xs={12} md={6}>
+                <FormControl fullWidth>
+                  <InputLabel>Select Doctor</InputLabel>
+                  <Select
+                    value={selectedDoctor || ""}
+                    onChange={(e) => setSelectedDoctor(e.target.value)}
+                    label="Select Doctor"
                   >
-                    {patient.firstName} {patient.lastName}
-                  </li>
-                ))}
-              </ul>
-            )}
+                    <MenuItem value="">-- Select Doctor --</MenuItem>
+                    {doctors.map((doctor) => (
+                      <MenuItem key={doctor._id} value={doctor._id}>
+                        {doctor.firstName} {doctor.lastName}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
 
-            {/* Loading indicator */}
-            {loadingPatients && (
-              <div className="mt-2 text-center">Loading...</div>
-            )}
+              {/* Department Select */}
+              <Grid item xs={12} md={6}>
+                <FormControl fullWidth>
+                  <InputLabel>Select Department</InputLabel>
+                  <Select
+                    value={selectedDepartment}
+                    onChange={(e) => setSelectedDepartment(e.target.value)}
+                    label="Select Department"
+                  >
+                    <MenuItem value="">-- Select Department --</MenuItem>
+                    {departments.map((department) => (
+                      <MenuItem key={department._id} value={department._id}>
+                        {department.departmentName}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
 
-            {selectedPatient && (
-              <div className="mt-2 text-start">
-                {selectedPatient.firstName} {selectedPatient.lastName}
-              </div>
-            )}
-          </div>
+              {/* Appointment Type */}
+              <Grid item xs={12} md={6}>
+                <FormControl fullWidth>
+                  <InputLabel>Appointment Type</InputLabel>
+                  <Select
+                    value={appointmentType}
+                    onChange={(e) => setAppointmentType(e.target.value)}
+                    label="Appointment Type"
+                  >
+                    <MenuItem value="">-- Select Appointment Type --</MenuItem>
+                    <MenuItem value="Meeting">Meeting</MenuItem>
+                    <MenuItem value="In-Person">In-Person</MenuItem>
+                    <MenuItem value="Checkup">Checkup</MenuItem>
+                    <MenuItem value="Emergency">Emergency</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
 
-          {/* Doctor Select */}
-          <div className="form-group col-md-6">
-            <label htmlFor="doctorSelect">Select Doctor</label>
-            <select
-              id="doctorSelect"
-              className="form-control"
-              value={selectedDoctor || ""}
-              onChange={(e) => setSelectedDoctor(e.target.value)}
-            >
-              <option value="">-- Select Doctor --</option>
-              {doctors.map((doctor) => (
-                <option key={doctor._id} value={doctor._id}>
-                  {doctor.firstName} {doctor.lastName}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
+              {/* Appointment Date */}
+              <Grid item xs={12} md={6}>
+                <TextField
+                  type="date"
+                  label="Appointment Date"
+                  fullWidth
+                  value={appointmentDate}
+                  onChange={(e) => setAppointmentDate(e.target.value)}
+                  InputLabelProps={{ shrink: true }}
+                  inputProps={{ min: today }}
+                />
+              </Grid>
 
-        <div className="form-row">
-          {/* Department Select */}
-          <div className="form-group col-md-6">
-            <label htmlFor="departmentSelect">Select Department</label>
-            <select
-              id="departmentSelect"
-              className="form-control"
-              value={selectedDepartment}
-              onChange={(e) => setSelectedDepartment(e.target.value)}
-            >
-              <option value="">-- Select Department --</option>
-              {departments.map((department) => (
-                <option key={department._id} value={department._id}>
-                  {department.departmentName}
-                </option>
-              ))}
-            </select>
-          </div>
+              {/* Appointment Time */}
+              <Grid item xs={12} md={6}>
+                <TextField
+                  type="time"
+                  label="Appointment Time"
+                  fullWidth
+                  value={appointmentTime}
+                  onChange={(e) => setAppointmentTime(e.target.value)}
+                  InputLabelProps={{ shrink: true }}
+                />
+              </Grid>
 
-          {/* Appointment Type */}
-          <div className="form-group col-md-6">
-            <label htmlFor="appointmentType">Appointment Type</label>
-            <select
-              id="appointmentType"
-              className="form-control"
-              value={appointmentType}
-              onChange={(e) => setAppointmentType(e.target.value)}
-            >
-              <option value="">-- Select Appointment Type --</option>
-              <option value="Meeting">Meeting</option>
-              <option value="In-Person">In-Person</option>
-              <option value="Checkup">Checkup</option>
-              <option value="Emergency">Emergency</option>
-            </select>
-          </div>
-        </div>
-
-        <div className="form-row">
-          {/* Appointment Date */}
-          <div className="form-group col-md-6">
-            <label htmlFor="appointmentDate">Appointment Date</label>
-            <input
-              type="date"
-              id="appointmentDate"
-              className="form-control"
-              value={appointmentDate}
-              min={today} // Set the minimum date to today
-              onChange={(e) => setAppointmentDate(e.target.value)}
-            />
-          </div>
-
-          {/* Appointment Time */}
-          <div className="form-group col-md-6">
-            <label htmlFor="appointmentTime">Appointment Time</label>
-            <input
-              type="time"
-              id="appointmentTime"
-              className="form-control"
-              value={appointmentTime}
-              onChange={(e) => setAppointmentTime(e.target.value)}
-            />
-          </div>
-        </div>
-
-        <button type="submit" className="btn btn-primary">
-          Create Appointment
-        </button>
-      </form>
-    </div>
+              <Grid item xs={12}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  sx={{ padding: "10px" }}
+                >
+                  Create Appointment
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
+        </CardContent>
+      </Card>
+    </Box>
   );
 };
 
