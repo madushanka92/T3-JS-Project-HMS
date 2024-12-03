@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Navbar, Nav, NavDropdown, Container } from "react-bootstrap";
 import "../assets/css/component/header.scss";
+import { useAuth } from "../context/AuthContext";
 
 const Header = () => {
   const location = useLocation();
@@ -26,6 +27,16 @@ const Header = () => {
       (f) => f.featureId.featureName === featureName
     );
     return feature && feature[permission];
+  };
+
+  const Logout = () => {
+    const { setIsAuthenticated } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+      setIsAuthenticated(false);
+      navigate("/login");
+    };
   };
 
   const headerMenuItems = [
@@ -158,7 +169,7 @@ const Header = () => {
               )}
               <Nav.Link
                 as={NavLink}
-                to="/"
+                onClick={Logout}
                 className={activeKey === "/" ? "active" : ""}
               >
                 Log Out

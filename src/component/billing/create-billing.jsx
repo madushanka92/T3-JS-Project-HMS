@@ -103,6 +103,8 @@ const BillingForm = ({ onBillCreated }) => {
         appointmentId: "",
         totalAmount: "",
       });
+      setSelectedPatient(null);
+      setAppointments([]);
       onBillCreated(response.data); // Callback to refresh the billing list
       setError(null);
     } catch (error) {

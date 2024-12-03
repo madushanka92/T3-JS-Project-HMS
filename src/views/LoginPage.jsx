@@ -3,12 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { Form, Button, Container, Row, Col, Card } from "react-bootstrap";
 import "../assets/css/LoginPage.scss";
 import { featureMappingService, userService } from "../_services/apiService";
+import { useAuth } from "../context/AuthContext";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("admin@hms.com");
   const [password, setPassword] = useState("admin");
   const [error, setError] = useState("");
+
+  const { setIsAuthenticated } = useAuth();
 
   useEffect(() => {
     localStorage.clear();
@@ -25,6 +28,7 @@ const LoginPage = () => {
         localStorage.setItem("authToken", token);
         localStorage.setItem("user", JSON.stringify(user));
         //
+        setIsAuthenticated(true);
 
         featureMappingService
           .getByRoleName(user.role)

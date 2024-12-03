@@ -74,7 +74,7 @@ const BillingDetails = ({ bill, refreshBillList }) => {
             </Avatar>
           }
           title="Billing Details"
-          subheader={`Bill ID: ${currentBill.id}`}
+          subheader={`Bill ID: ${currentBill._id}`}
           titleTypographyProps={{ variant: "h5" }}
         />
         <CardContent>
@@ -128,7 +128,10 @@ const BillingDetails = ({ bill, refreshBillList }) => {
             <Typography variant="h5" gutterBottom>
               Payment History
             </Typography>
-            <PaymentHistory billId={currentBill.id} refreshFlag={refreshFlag} />
+            <PaymentHistory
+              billId={currentBill._id}
+              refreshFlag={refreshFlag}
+            />
           </CardContent>
         </Card>
       )}
