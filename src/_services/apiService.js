@@ -9,6 +9,21 @@ const api = axios.create({
     },
 });
 
+// Axios interceptor to add userId to all requests
+api.interceptors.request.use((config) => {
+
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+        const userId = user._id;  // Get userId from token or session
+        if (userId) {
+            config.headers['X-User-Id'] = userId;  // Add userId to headers automatically
+        }
+    }
+    return config;
+}, (error) => {
+    return Promise.reject(error);
+});
+
 // User API
 const userService = {
     getAllUsers: (roleName) => {
