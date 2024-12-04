@@ -25,7 +25,7 @@ This is a **React.js** web application for managing hospital operations, includi
 ### Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/madushanka92/T3-JS-Project-HMS.git
 cd js-project-hms
 ```
 
