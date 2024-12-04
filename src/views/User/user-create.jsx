@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import bcrypt from "bcryptjs";
 import {
   roleService,
   departmentService,
@@ -33,6 +34,7 @@ const UserRegistrationForm = ({ message, onSubmit }) => {
           let data = { ...response.data };
           data.roleId = response.data.roleId?._id;
           data.departmentId = response.data.departmentId?._id;
+          data.password = "";
           setUserData(data);
         })
         .catch((err) => {
@@ -68,158 +70,188 @@ const UserRegistrationForm = ({ message, onSubmit }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (userId) {
-      // Update existing user
-      userService
-        .updateUser(userId, userData)
-        .then((response) => {
-          console.log("User updated successfully:", response);
-          navigate("/users/list");
-          if (onSubmit) {
-            onSubmit(response);
-          }
-        })
-        .catch((err) => {
-          console.error("Error updating user:", err);
-        });
-    } else {
-      // Create new user if no userId
-      userService
-        .createUser(userData)
-        .then((response) => {
-          console.log("User created successfully:", response);
-          navigate("/users/list");
-          if (onSubmit) {
-            onSubmit(response);
-          }
-        })
-        .catch((err) => {
-          console.error("Error creating user:", err);
-        });
+    try {
+      let updatedUserData = { ...userData };
+
+      // Check if a new password is entered (only in edit mode)
+      if (userData.password.trim() !== "") {
+        // Hash the new password
+        updatedUserData.password = await bcrypt.hash(userData.password, 10);
+      } else {
+        // If no password entered, retain the current password in edit mode
+        delete updatedUserData.password;
+      }
+
+      if (userId) {
+        // Update existing user
+        userService
+          .updateUser(userId, updatedUserData)
+          .then((response) => {
+            console.log("User updated successfully:", response);
+            navigate("/users/list");
+            if (onSubmit) {
+              onSubmit(response);
+            }
+          })
+          .catch((err) => {
+            console.error("Error updating user:", err);
+          });
+      } else {
+        // Create new user
+        userService
+          .createUser(updatedUserData)
+          .then((response) => {
+            console.log("User created successfully:", response);
+            navigate("/users/list");
+            if (onSubmit) {
+              onSubmit(response);
+            }
+          })
+          .catch((err) => {
+            console.error("Error creating user:", err);
+          });
+      }
+    } catch (error) {
+      console.error("Error handling password:", error);
     }
   };
 
   return (
     <div className="container">
-      <h2>{userId ? "Edit User" : "User Registration Form"}</h2>
+      <h2 className="text-start">
+        {userId ? "Edit User" : "User Registration Form"}
+      </h2>
 
       {message && <p style={{ color: "red" }}>{message}</p>}
 
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="firstName">First Name:</label>
-          <input
-            type="text"
-            id="firstName"
-            name="firstName"
-            required
-            className="form-control"
-            value={userData.firstName}
-            onChange={handleChange}
-          />
-        </div>
+        <div className="row">
+          <div className="col-md-6">
+            <div className="form-group">
+              <label htmlFor="firstName">First Name:</label>
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                required
+                className="form-control"
+                value={userData.firstName}
+                onChange={handleChange}
+              />
+            </div>
 
-        <div className="form-group">
-          <label htmlFor="lastName">Last Name:</label>
-          <input
-            type="text"
-            id="lastName"
-            name="lastName"
-            required
-            className="form-control"
-            value={userData.lastName}
-            onChange={handleChange}
-          />
-        </div>
+            <div className="form-group">
+              <label htmlFor="lastName">Last Name:</label>
+              <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                required
+                className="form-control"
+                value={userData.lastName}
+                onChange={handleChange}
+              />
+            </div>
 
-        <div className="form-group">
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            required
-            className="form-control"
-            value={userData.email}
-            onChange={handleChange}
-          />
-        </div>
+            <div className="form-group">
+              <label htmlFor="email">Email:</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                className="form-control"
+                value={userData.email}
+                onChange={handleChange}
+              />
+            </div>
 
-        <div className="form-group">
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            required
-            className="form-control"
-            value={userData.password}
-            onChange={handleChange}
-          />
-        </div>
+            {/* Show password field for both create and edit mode, but only encrypt if the password is provided */}
+            <div className="form-group">
+              <label htmlFor="password">
+                Password:{" "}
+                <small className="text-muted">
+                  {userId
+                    ? "(Leave blank to keep the current password)"
+                    : "(Required)"}
+                </small>
+              </label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                className="form-control"
+                value={userData.password}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
 
-        <div className="form-group">
-          <label htmlFor="role">Role:</label>
-          <select
-            id="role"
-            name="roleId"
-            required
-            className="form-control"
-            value={userData.roleId}
-            onChange={handleChange}
-          >
-            <option value="">Select a role</option>
-            {roles?.map((role) => (
-              <option key={role._id} value={role._id}>
-                {role.roleName}
-              </option>
-            ))}
-          </select>
-        </div>
+          <div className="col-md-6">
+            <div className="form-group">
+              <label htmlFor="role">Role:</label>
+              <select
+                id="role"
+                name="roleId"
+                required
+                className="form-control"
+                value={userData.roleId}
+                onChange={handleChange}
+              >
+                <option value="">Select a role</option>
+                {roles?.map((role) => (
+                  <option key={role._id} value={role._id}>
+                    {role.roleName}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-        <div className="form-group">
-          <label htmlFor="department">Department:</label>
-          <select
-            required
-            id="department"
-            name="departmentId"
-            className="form-control"
-            value={userData.departmentId}
-            onChange={handleChange}
-          >
-            <option value="">Select a department</option>
-            {departments?.map((department) => (
-              <option key={department._id} value={department._id}>
-                {department.departmentName}
-              </option>
-            ))}
-          </select>
-        </div>
+            <div className="form-group">
+              <label htmlFor="department">Department:</label>
+              <select
+                required
+                id="department"
+                name="departmentId"
+                className="form-control"
+                value={userData.departmentId}
+                onChange={handleChange}
+              >
+                <option value="">Select a department</option>
+                {departments?.map((department) => (
+                  <option key={department._id} value={department._id}>
+                    {department.departmentName}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-        <div className="form-group">
-          <label htmlFor="contactNumber">Contact Number:</label>
-          <input
-            type="text"
-            id="contactNumber"
-            name="contactNumber"
-            className="form-control"
-            value={userData.contactNumber}
-            onChange={handleChange}
-          />
-        </div>
+            <div className="form-group">
+              <label htmlFor="contactNumber">Contact Number:</label>
+              <input
+                type="text"
+                id="contactNumber"
+                name="contactNumber"
+                className="form-control"
+                value={userData.contactNumber}
+                onChange={handleChange}
+              />
+            </div>
 
-        <div className="form-group">
-          <label htmlFor="address">Address:</label>
-          <textarea
-            id="address"
-            name="address"
-            className="form-control"
-            value={userData.address}
-            onChange={handleChange}
-          />
+            <div className="form-group">
+              <label htmlFor="address">Address:</label>
+              <textarea
+                id="address"
+                name="address"
+                className="form-control"
+                value={userData.address}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
         </div>
 
         <button type="submit" className="btn btn-primary">

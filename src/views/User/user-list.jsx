@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { userService } from "../../_services/apiService";
 import { useNavigate } from "react-router-dom";
+import { getFeaturePermissions } from "../../utils/permissions";
 
 const UserListPage = () => {
   const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]); // State for filtered users
+  const [searchTerm, setSearchTerm] = useState(""); // State for the search input
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const [userCreate, setUserCreate] = useState(false);
+
+  useEffect(() => {
+    setUserCreate(getFeaturePermissions("Users"));
+  }, []);
 
   // Fetch users on component mount
   useEffect(() => {
@@ -13,12 +21,29 @@ const UserListPage = () => {
       .getAllUsers()
       .then((response) => {
         setUsers(response.data);
+        setFilteredUsers(response.data); // Initialize filteredUsers with all users
       })
       .catch((err) => {
         console.error("Error fetching users:", err);
         setError("Failed to load users.");
       });
   }, []);
+
+  // Handle search input change
+  const handleSearch = (e) => {
+    const term = e.target.value.toLowerCase();
+    setSearchTerm(term);
+
+    // Filter users based on the search term
+    const filtered = users.filter(
+      (user) =>
+        user.firstName.toLowerCase().includes(term) ||
+        user.lastName.toLowerCase().includes(term) ||
+        user.email.toLowerCase().includes(term) ||
+        (user.departmentId?.departmentName || "").toLowerCase().includes(term)
+    );
+    setFilteredUsers(filtered);
+  };
 
   const handleEdit = (userId) => {
     navigate(`/users/edit/${userId}`);
@@ -30,10 +55,13 @@ const UserListPage = () => {
     );
     if (confirmDelete) {
       userService
-        .deleteUser(userId) // Assuming you have a deleteUser method in your userService
+        .deleteUser(userId)
         .then(() => {
           // After deleting, remove the user from the list without re-fetching
           setUsers((prevUsers) =>
+            prevUsers.filter((user) => user._id !== userId)
+          );
+          setFilteredUsers((prevUsers) =>
             prevUsers.filter((user) => user._id !== userId)
           );
         })
@@ -46,9 +74,20 @@ const UserListPage = () => {
 
   return (
     <div className="container user-list">
-      <h2>All Users</h2>
+      <h2 className="text-start">All Users</h2>
 
       {error && <p style={{ color: "red" }}>{error}</p>}
+
+      {/* Search Field */}
+      <div className="mb-3">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Search by name, email, or department"
+          value={searchTerm}
+          onChange={handleSearch}
+        />
+      </div>
 
       <table className="table table-striped">
         <thead>
@@ -63,7 +102,7 @@ const UserListPage = () => {
           </tr>
         </thead>
         <tbody>
-          {users?.map((user) => (
+          {filteredUsers?.map((user) => (
             <tr key={user._id}>
               <td>{user.firstName}</td>
               <td>{user.lastName}</td>
@@ -75,12 +114,14 @@ const UserListPage = () => {
                 <button
                   className="btn btn-warning"
                   onClick={() => handleEdit(user._id)}
+                  disabled={!userCreate.canUpdate}
                 >
                   Edit
                 </button>
                 <button
                   className="btn btn-danger"
                   onClick={() => handleDelete(user._id)}
+                  disabled={!userCreate.canDelete}
                 >
                   Delete
                 </button>

@@ -9,4 +9,14 @@
             justify-content: space-around;
         }
     }
+
+    .chats {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        canvas {
+            width: 500px !important;
+            height: 450px !important;
+        }
+    }
 }

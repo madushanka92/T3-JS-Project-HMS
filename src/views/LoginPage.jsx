@@ -1,20 +1,52 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form, Button, Container, Row, Col, Card } from "react-bootstrap";
 import "../assets/css/LoginPage.scss";
+import { featureMappingService, userService } from "../_services/apiService";
+import { useAuth } from "../context/AuthContext";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("example@example.com");
-  const [password, setPassword] = useState("password");
+  const [email, setEmail] = useState("admin@hms.com");
+  const [password, setPassword] = useState("admin");
+  const [error, setError] = useState("");
+
+  const { setIsAuthenticated } = useAuth();
+
+  useEffect(() => {
+    // localStorage.clear();
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle login logic here
-    console.log("Email:", email);
-    console.log("Password:", password);
 
-    navigate("/home");
+    userService
+      .loginUser({ email, password })
+      .then((response) => {
+        const { token, user } = response.data;
+
+        localStorage.setItem("authToken", token);
+        localStorage.setItem("user", JSON.stringify(user));
+        //
+        setIsAuthenticated(true);
+
+        featureMappingService
+          .getByRoleName(user.role)
+          .then((features) => {
+            localStorage.setItem(
+              "featureSettings",
+              JSON.stringify(features.data)
+            );
+            navigate("/home");
+          })
+          .catch(() => {
+            localStorage.setItem("featureSettings", []);
+            navigate("/home");
+          });
+      })
+      .catch((err) => {
+        setError(err.response?.data?.message || "An error occurred");
+      });
   };
 
   return (
@@ -27,6 +59,8 @@ const LoginPage = () => {
           <Card>
             <Card.Body>
               <h2 className="text-center mb-4">Login</h2>
+              {error && <div className="alert alert-danger">{error}</div>}{" "}
+              {/* Show error if any */}
               <Form onSubmit={handleSubmit}>
                 <Form.Group id="email" className="mb-3">
                   <Form.Label>Email</Form.Label>
