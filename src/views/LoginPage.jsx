@@ -14,7 +14,7 @@ const LoginPage = () => {
   const { setIsAuthenticated } = useAuth();
 
   useEffect(() => {
-    localStorage.clear();
+    // localStorage.clear();
   });
 
   const handleSubmit = (e) => {

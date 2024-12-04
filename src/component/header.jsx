@@ -30,6 +30,7 @@ const Header = () => {
   };
 
   const Logout = () => {
+    localStorage.clear();
     const { setIsAuthenticated } = useAuth();
     const navigate = useNavigate();
 
